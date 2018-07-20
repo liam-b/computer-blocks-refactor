@@ -1,38 +1,38 @@
-enum Direction {
-  RIGHT, DOWN, LEFT, UP
+enum Rotation {
+  UP, DOWN, LEFT, RIGHT
 }
 
-class Position {
+class BlockPosition {
   int x, y, l;
-  Direction r;
+  Rotation r;
 
-  Position(int x_, int y_, Direction r_, int l_) {
+  BlockPosition(int x_, int y_, Rotation r_, int l_) {
     x = x_;
     y = y_;
     r = r_;
     l = l_;
   }
 
-  boolean isEqual(Position pos) {
+  boolean isEqual(BlockPosition pos) {
     if (x == pos.x || y == pos.y || l == pos.l) return true;
     return false;
   }
 
-  boolean isFacing(Position pos) {
+  boolean isFacing(BlockPosition pos) {
     int posX = pos.x;
     int posY = pos.y;
 
-    if (r == Direction.UP) posY ++;
-    if (r == Direction.RIGHT) posX --;
-    if (r == Direction.DOWN) posY --;
-    if (r == Direction.LEFT) posX ++;
+    if (r == Rotation.UP) posY ++;
+    if (r == Rotation.RIGHT) posX --;
+    if (r == Rotation.DOWN) posY --;
+    if (r == Rotation.LEFT) posX ++;
 
     if (x == posX && y == posY) return true;
     return false;
   }
 
-  Position duplicate() {
-    return new Position(x, y, r, l);
+  BlockPosition duplicate() {
+    return new BlockPosition(x, y, r, l);
   }
 }
 

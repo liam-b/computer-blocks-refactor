@@ -1,28 +1,40 @@
+Grid grid;
+Player player;
+
 void setup() {
   fullScreen();
   pixelDensity(2);
   frameRate(60);
   cursor(CROSS);
-
   rectMode(CENTER);
   noStroke();
   background(COLOR_BACKGROUND);
+
+  grid = new Grid(40, 20, 1);
+  player = new Player();
 }
 
 void draw() {
-
+  background(COLOR_BACKGROUND);
+  player.mouseTranslateUpdate();
+  grid.update(player);
+  grid.draw(player);
 }
 
-int convertKeyToInt(char charKey) {
-  if(charKey == '0') return 0;
-  if(charKey == '1') return 1;
-  if(charKey == '2') return 2;
-  if(charKey == '3') return 3;
-  if(charKey == '4') return 4;
-  if(charKey == '5') return 5;
-  if(charKey == '6') return 6;
-  if(charKey == '7') return 7;
-  if(charKey == '8') return 8;
-  if(charKey == '9') return 9;
-  return -1;
+void keyPressed() {
+  if (key == 'k') {
+    // add test block to grid
+  }
+}
+
+void mousePressed() {
+  player.mouseTranslateReset();
+}
+
+void mouseReleased() {
+  player.mouseTranslateReset();
+}
+
+void mouseWheel(MouseEvent event) {
+  player.mouseZoomUpdate(event.getCount());
 }

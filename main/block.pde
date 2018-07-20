@@ -1,17 +1,88 @@
 enum BlockType {
-  CABLE, SOURCE, INVERTER, VIA, DELAY
+  EMPTY, CABLE, SOURCE, INVERTER, VIA, DELAY
 }
 
 class Block {
+  BlockPosition position;
   BlockType type;
-  Position position;
-  boolean charge = false;
-  boolean lastCharge = false;
-  ArrayList<Position> inputs;
+  boolean charge;
+  boolean lastCharge;
+  boolean interactionLock;
+  ArrayList<BlockPosition> inputs;
 
-  Block(BlockType type_, Position position_) {
-    type = type_;
+  Block(BlockPosition position_) {
     position = position_;
+
+    type = BlockType.EMPTY;
+    charge = false;
+    lastCharge = false;
+    interactionLock = false;
     inputs = new ArrayList<BlockPosition>();
   }
+
+  Block(BlockPosition position_, BlockType type_, boolean charge_, boolean lastCharge_, ArrayList<BlockPosition> inputs_) {
+    position = position_;
+    type = type_;
+    charge = charge_;
+    lastCharge = lastCharge_;
+    interactionLock = false;
+    inputs = inputs_;
+  }
+
+  void draw(Player player) {
+    float rectSize = BLOCK_SIZE * player.zoom;
+    color drawFill = getColorFromType(type, charge);
+    RealPosition drawPosition = new RealPosition(
+      BLOCK_OFFSET + player.translate.x + BLOCK_RATIO * position.x * player.zoom,
+      BLOCK_OFFSET + player.translate.y + BLOCK_RATIO * position.y * player.zoom
+    );
+
+    fill(drawFill);
+    rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
+  }
+
+  void place(Player player, Grid grid) {
+    type = player.selectedType;
+    charge = false;
+    lastCharge = false;
+    position.r = player.selectedRotation;
+    inputs = new ArrayList<BlockPosition>();
+
+    // update(player, space, position);
+  }
+
+  void erase(Player player, Grid grid) {
+    type = BlockType.EMPTY;
+    charge = false;
+    lastCharge = false;
+    inputs = new ArrayList<BlockPosition>();
+
+    // updateSurroundingBlocks(getSurroundingBlocks(space), space, player, position);
+  }
+
+  boolean mouseOver(Player player) {
+    return mouseX > BLOCK_OFFSET + player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+           mouseX < BLOCK_OFFSET + player.translate.x + BLOCK_RATIO * position.x * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
+           mouseY > BLOCK_OFFSET + player.translate.y + BLOCK_RATIO * position.y * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+           mouseY < BLOCK_OFFSET + player.translate.y + BLOCK_RATIO * position.y * player.zoom + BLOCK_SIZE * player.zoom / 2;
+  }
 }
+
+// class BlockClass {
+//   color colOn;
+//   color colOff;
+//
+//   BlockClass() {}
+// }
+//
+// class InverterBlock extends BlockClass {
+//   InverterBlock() {
+//     super();
+//     colOn = COLOR_INVERTER_ON;
+//     colOff = COLOR_INVERTER_OFF;
+//   }
+//
+//   updateBlock() {
+//
+//   }
+// }
