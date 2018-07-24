@@ -8,14 +8,14 @@ void setup() {
   cursor(CROSS);
   rectMode(CENTER);
   noStroke();
-  background(COLOR_BACKGROUND);
+  background(Color.BACKGROUND);
 
   grid = new Grid(40, 20, 1);
   player = new Player();
 }
 
 void draw() {
-  background(COLOR_BACKGROUND);
+  background(Color.BACKGROUND);
   player.mouseTranslateUpdate();
   grid.update(player);
   grid.draw(player);

@@ -31,10 +31,10 @@ class Block {
 
   void draw(Player player) {
     float rectSize = BLOCK_SIZE * player.zoom;
-    color drawFill = getColorFromType(type, charge);
+    color drawFill = Color.getFromType(type, charge);
     RealPosition drawPosition = new RealPosition(
-      BLOCK_OFFSET + player.translate.x + BLOCK_RATIO * position.x * player.zoom,
-      BLOCK_OFFSET + player.translate.y + BLOCK_RATIO * position.y * player.zoom
+      player.translate.x + BLOCK_RATIO * position.x * player.zoom,
+      player.translate.y + BLOCK_RATIO * position.y * player.zoom
     );
 
     fill(drawFill);
@@ -61,10 +61,10 @@ class Block {
   }
 
   boolean mouseOver(Player player) {
-    return mouseX > BLOCK_OFFSET + player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
-           mouseX < BLOCK_OFFSET + player.translate.x + BLOCK_RATIO * position.x * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
-           mouseY > BLOCK_OFFSET + player.translate.y + BLOCK_RATIO * position.y * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
-           mouseY < BLOCK_OFFSET + player.translate.y + BLOCK_RATIO * position.y * player.zoom + BLOCK_SIZE * player.zoom / 2;
+    return mouseX > player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+           mouseX < player.translate.x + BLOCK_RATIO * position.x * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
+           mouseY > player.translate.y + BLOCK_RATIO * position.y * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+           mouseY < player.translate.y + BLOCK_RATIO * position.y * player.zoom + BLOCK_SIZE * player.zoom / 2;
   }
 }
 
