@@ -1,63 +1,41 @@
 enum BlockType {
-  EMPTY, CABLE, SOURCE, INVERTER, VIA, DELAY
-}
+  CABLE, SOURCE, INVERTER, VIA, DELAY
+};
 
 class Block {
   BlockPosition position;
-  BlockType type;
   boolean charge;
   boolean lastCharge;
   boolean interactionLock;
   ArrayList<BlockPosition> inputs;
 
-  Block(BlockPosition position_) {
-    position = position_;
+  color blockColorOn;
+  color blockColorOff;
 
-    type = BlockType.EMPTY;
+  Block(BlockPosition position_, color blockColorOn_, color blockColorOff_) {
+    position = position_;
     charge = false;
     lastCharge = false;
     interactionLock = false;
     inputs = new ArrayList<BlockPosition>();
-  }
 
-  Block(BlockPosition position_, BlockType type_, boolean charge_, boolean lastCharge_, ArrayList<BlockPosition> inputs_) {
-    position = position_;
-    type = type_;
-    charge = charge_;
-    lastCharge = lastCharge_;
-    interactionLock = false;
-    inputs = inputs_;
+    blockColorOn = blockColorOn_;
+    blockColorOff = blockColorOff_;
   }
 
   void draw(Player player) {
     float rectSize = BLOCK_SIZE * player.zoom;
-    color drawFill = Color.getFromType(type, charge);
     RealPosition drawPosition = new RealPosition(
       player.translate.x + BLOCK_RATIO * position.x * player.zoom,
       player.translate.y + BLOCK_RATIO * position.y * player.zoom
     );
 
-    fill(drawFill);
+    fill((charge) ? blockColorOn : blockColorOff);
     rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
   }
 
-  void place(Player player, Grid grid) {
-    type = player.selectedType;
-    charge = false;
-    lastCharge = false;
-    position.r = player.selectedRotation;
-    inputs = new ArrayList<BlockPosition>();
+  void update() {
 
-    // update(player, space, position);
-  }
-
-  void erase(Player player, Grid grid) {
-    type = BlockType.EMPTY;
-    charge = false;
-    lastCharge = false;
-    inputs = new ArrayList<BlockPosition>();
-
-    // updateSurroundingBlocks(getSurroundingBlocks(space), space, player, position);
   }
 
   boolean mouseOver(Player player) {
@@ -68,21 +46,59 @@ class Block {
   }
 }
 
-// class BlockClass {
-//   color colOn;
-//   color colOff;
-//
-//   BlockClass() {}
-// }
-//
-// class InverterBlock extends BlockClass {
-//   InverterBlock() {
-//     super();
-//     colOn = COLOR_INVERTER_ON;
-//     colOff = COLOR_INVERTER_OFF;
-//   }
-//
-//   updateBlock() {
-//
-//   }
-// }
+class DirectionalBlock extends Block {
+  DirectionalBlock(BlockPosition position_, color blockColorOn_, color blockColorOff_) {
+    super(position_, blockColorOn_, blockColorOff_);
+  }
+
+  void draw(Player player) {
+    float rectSize = BLOCK_SIZE * player.zoom;
+    RealPosition drawPosition = new RealPosition(
+      player.translate.x + BLOCK_RATIO * position.x * player.zoom,
+      player.translate.y + BLOCK_RATIO * position.y * player.zoom
+    );
+
+    fill((charge) ? blockColorOn : blockColorOff);
+    rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
+
+    fill(Color.SOURCE);
+    if (position.r == Rotation.DOWN) rect(drawPosition.x, drawPosition.y + rectSize / 2.5 - rectSize / 24, rectSize / 2, rectSize / 12);
+    if (position.r == Rotation.RIGHT) rect(drawPosition.x + rectSize / 2.5 - rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
+    if (position.r == Rotation.UP) rect(drawPosition.x, drawPosition.y - rectSize / 2.5 + rectSize / 24, rectSize / 2, rectSize / 12);
+    if (position.r == Rotation.LEFT) rect(drawPosition.x - rectSize / 2.5 + rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
+  }
+}
+
+class CableBlock extends Block {
+  CableBlock(BlockPosition position_) {
+    super(position_, Color.CABLE_ON, Color.CABLE_OFF);
+  }
+}
+
+class SourceBlock extends Block {
+  SourceBlock(BlockPosition position_) {
+    super(position_, Color.SOURCE, Color.SOURCE);
+  }
+
+  void udate() {
+
+  }
+}
+
+class InverterBlock extends DirectionalBlock {
+  InverterBlock(BlockPosition position_) {
+    super(position_, Color.INVERTER_ON, Color.INVERTER_OFF);
+  }
+}
+
+class DelayBlock extends DirectionalBlock {
+  DelayBlock(BlockPosition position_) {
+    super(position_, Color.DELAY_ON, Color.DELAY_OFF);
+  }
+}
+
+class ViaBlock extends Block {
+  ViaBlock(BlockPosition position_) {
+    super(position_, Color.VIA_ON, Color.VIA_OFF);
+  }
+}

@@ -13,8 +13,15 @@ class BlockPosition {
     l = l_;
   }
 
+  BlockPosition(int x_, int y_, int l_) {
+    x = x_;
+    y = y_;
+    r = Rotation.UP;
+    l = l_;
+  }
+
   boolean isEqual(BlockPosition pos) {
-    if (x == pos.x || y == pos.y || l == pos.l) return true;
+    if (x == pos.x && y == pos.y && l == pos.l) return true;
     return false;
   }
 

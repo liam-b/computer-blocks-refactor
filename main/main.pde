@@ -13,7 +13,9 @@ void setup() {
   grid = new Grid(40, 20, 1);
   player = new Player();
 
-  grid.blocks.add(new Block(new BlockPosition(2, 6, Rotation.UP, 0), BlockType.CABLE, false, false, new ArrayList<BlockPosition>()));
+  grid.place(BlockType.CABLE, new BlockPosition(0, 0, Rotation.UP, 0));
+  grid.place(BlockType.INVERTER, new BlockPosition(1, 0, Rotation.UP, 0));
+
 }
 
 void draw() {
@@ -21,11 +23,16 @@ void draw() {
   player.mouseTranslateUpdate();
   grid.update(player);
   grid.draw(player);
+  // for (Block i : grid.blocks) {
+  //   fill(Color.VIA_ON);
+  //   text(i.getClass().getSimpleName(), 10, 20);
+  //   // print();
+  // }
 }
 
 void keyPressed() {
   if (key == 'k') {
-    // add test block to grid
+    grid.erase(new BlockPosition(1, 0, 0));
   }
 }
 

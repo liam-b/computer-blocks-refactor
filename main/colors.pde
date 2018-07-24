@@ -10,26 +10,4 @@ static class Color {
   static color VIA_ON = #75BDEA;
   static color DELAY_OFF = #59C664;
   static color DELAY_ON = #62DB6E;
-
-  static color getFromType(BlockType type, boolean charge) {
-    if (charge) {
-      switch (type) {
-        case CABLE: return CABLE_ON;
-        case SOURCE: return SOURCE;
-        case INVERTER: return INVERTER_ON;
-        case VIA: return VIA_ON;
-        case DELAY: return DELAY_ON;
-        default: return EMPTY;
-      }
-    } else {
-      switch(type) {
-        case CABLE: return CABLE_OFF;
-        case SOURCE: return SOURCE;
-        case INVERTER: return INVERTER_OFF;
-        case VIA: return VIA_OFF;
-        case DELAY: return DELAY_OFF;
-        default: return EMPTY;
-      }
-    }
-  }
 }
