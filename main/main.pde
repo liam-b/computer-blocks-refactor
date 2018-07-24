@@ -12,6 +12,8 @@ void setup() {
 
   grid = new Grid(40, 20, 1);
   player = new Player();
+
+  grid.blocks.add(new Block(new BlockPosition(2, 6, Rotation.UP, 0), BlockType.CABLE, false, false, new ArrayList<BlockPosition>()));
 }
 
 void draw() {

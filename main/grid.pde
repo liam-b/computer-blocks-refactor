@@ -11,12 +11,26 @@ class Grid {
   }
 
   void draw(Player player) {
+    drawEmptyGrid();
+    drawBlocks();
+  }
+
+  void drawEmptyGrid() {
     for (int x = 0; x < gridWidth; x++) {
       for (int y = 0; y < gridHeight; y++) {
-        // TODO: draw blank tiles
+        float rectSize = BLOCK_SIZE * player.zoom;
+        RealPosition drawPosition = new RealPosition(
+          player.translate.x + BLOCK_RATIO * x * player.zoom,
+          player.translate.y + BLOCK_RATIO * y * player.zoom
+        );
+
+        fill(Color.EMPTY);
+        rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
       }
     }
+  }
 
+  void drawBlocks() {
     for (Block block : blocks) {
       block.draw(player);
     }
