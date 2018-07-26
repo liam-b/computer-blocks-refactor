@@ -34,6 +34,16 @@ class Block {
     rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
   }
 
+  ArrayList<Block> getSurroundingBlocks() {
+    ArrayList<Block> result = new ArrayList<Block>();
+    result.add(grid.getBlockAtPosition(new BlockPosition(position.x + 1, position.y, position.l)));
+    result.add(grid.getBlockAtPosition(new BlockPosition(position.x - 1, position.y, position.l)));
+    result.add(grid.getBlockAtPosition(new BlockPosition(position.x, position.y + 1, position.l)));
+    result.add(grid.getBlockAtPosition(new BlockPosition(position.x, position.y - 1, position.l)));
+
+    return result;
+  }
+
   void update() {
 
   }
@@ -80,8 +90,17 @@ class SourceBlock extends Block {
     super(position_, Color.SOURCE, Color.SOURCE);
   }
 
-  void udate() {
-
+  void update() {
+    fill(Color.VIA_ON);
+    println("-----");
+    for (Block i : getSurroundingBlocks()) {
+      if (i != null) {
+        i.charge = true;
+        // fill(Color.VIA_ON);
+        // text(str(i.position.x), 10, 20);
+        println(str(i.position.x) + ", " + str(i.position.y) + ", " + str(i.position.l));
+      }
+    }
   }
 }
 

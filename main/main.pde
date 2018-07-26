@@ -13,8 +13,9 @@ void setup() {
   grid = new Grid(40, 20, 1);
   player = new Player();
 
-  grid.place(BlockType.CABLE, new BlockPosition(0, 0, Rotation.UP, 0));
-  grid.place(BlockType.INVERTER, new BlockPosition(1, 0, Rotation.UP, 0));
+  grid.place(BlockType.SOURCE, new BlockPosition(0, 0, Rotation.UP, 0));
+  grid.place(BlockType.CABLE, new BlockPosition(0, 1, Rotation.UP, 0));;
+  grid.place(BlockType.CABLE, new BlockPosition(1, 0, Rotation.UP, 0));
 
 }
 
@@ -32,12 +33,13 @@ void draw() {
 
 void keyPressed() {
   if (key == 'k') {
-    grid.erase(new BlockPosition(1, 0, 0));
+    grid.erase(new BlockPosition(0, 0, 0));
   }
 }
 
 void mousePressed() {
   player.mouseTranslateReset();
+  player.updateClick();
 }
 
 void mouseReleased() {

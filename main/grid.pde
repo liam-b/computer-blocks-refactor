@@ -33,7 +33,15 @@ class Grid {
   void drawBlocks() {
     for (Block block : blocks) {
       block.draw(player);
+      block.update();
     }
+  }
+
+  Block getBlockAtPosition(BlockPosition position) {
+    for (Block block : blocks) {
+      if (block.position.isEqual(position)) return block;
+    }
+    return null;
   }
 
   void place(BlockType type, BlockPosition position) {

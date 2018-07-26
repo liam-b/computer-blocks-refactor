@@ -30,6 +30,12 @@ class Player {
     }
   }
 
+  void updateClick() {
+    if () {
+
+    }
+  }
+
   void mouseTranslateReset() {
     if (mouseButton == RIGHT) {
       oldTranslate.x = mouseX - oldTranslate.x;
