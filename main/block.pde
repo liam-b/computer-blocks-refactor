@@ -9,15 +9,18 @@ class Block {
   boolean interactionLock;
   ArrayList<BlockPosition> inputs;
 
+  BlockType type;
+
   color blockColorOn;
   color blockColorOff;
 
-  Block(BlockPosition position_, color blockColorOn_, color blockColorOff_) {
+  Block(BlockPosition position_, color blockColorOn_, color blockColorOff_, BlockType type_) {
     position = position_;
     charge = false;
     lastCharge = false;
     interactionLock = false;
     inputs = new ArrayList<BlockPosition>();
+    type = type_;
 
     blockColorOn = blockColorOn_;
     blockColorOff = blockColorOff_;
@@ -57,8 +60,8 @@ class Block {
 }
 
 class DirectionalBlock extends Block {
-  DirectionalBlock(BlockPosition position_, color blockColorOn_, color blockColorOff_) {
-    super(position_, blockColorOn_, blockColorOff_);
+  DirectionalBlock(BlockPosition position_, color blockColorOn_, color blockColorOff_, BlockType type_) {
+    super(position_, blockColorOn_, blockColorOff_, type_);
   }
 
   void draw(Player player) {
@@ -81,24 +84,31 @@ class DirectionalBlock extends Block {
 
 class CableBlock extends Block {
   CableBlock(BlockPosition position_) {
-    super(position_, Color.CABLE_ON, Color.CABLE_OFF);
+    super(position_, Color.CABLE_ON, Color.CABLE_OFF, BlockType.CABLE);
+  }
+
+  void update() {
+    boolean j = false;
+    for (Block i : getSurroundingBlocks()) {
+      if (i != null) {
+        if (i.type == BlockType.SOURCE) {
+          j = true;
+        }
+      }
+    }
+    charge = j;
   }
 }
 
 class SourceBlock extends Block {
   SourceBlock(BlockPosition position_) {
-    super(position_, Color.SOURCE, Color.SOURCE);
+    super(position_, Color.SOURCE, Color.SOURCE, BlockType.SOURCE);
   }
 
   void update() {
-    fill(Color.VIA_ON);
-    println("-----");
     for (Block i : getSurroundingBlocks()) {
       if (i != null) {
         i.charge = true;
-        // fill(Color.VIA_ON);
-        // text(str(i.position.x), 10, 20);
-        println(str(i.position.x) + ", " + str(i.position.y) + ", " + str(i.position.l));
       }
     }
   }
@@ -106,18 +116,18 @@ class SourceBlock extends Block {
 
 class InverterBlock extends DirectionalBlock {
   InverterBlock(BlockPosition position_) {
-    super(position_, Color.INVERTER_ON, Color.INVERTER_OFF);
+    super(position_, Color.INVERTER_ON, Color.INVERTER_OFF, BlockType.INVERTER);
   }
 }
 
 class DelayBlock extends DirectionalBlock {
   DelayBlock(BlockPosition position_) {
-    super(position_, Color.DELAY_ON, Color.DELAY_OFF);
+    super(position_, Color.DELAY_ON, Color.DELAY_OFF, BlockType.DELAY);
   }
 }
 
 class ViaBlock extends Block {
   ViaBlock(BlockPosition position_) {
-    super(position_, Color.VIA_ON, Color.VIA_OFF);
+    super(position_, Color.VIA_ON, Color.VIA_OFF, BlockType.VIA);
   }
 }

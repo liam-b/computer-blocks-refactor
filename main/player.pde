@@ -31,9 +31,7 @@ class Player {
   }
 
   void updateClick() {
-    if () {
-
-    }
+    
   }
 
   void mouseTranslateReset() {

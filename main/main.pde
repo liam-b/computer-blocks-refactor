@@ -35,6 +35,13 @@ void keyPressed() {
   if (key == 'k') {
     grid.erase(new BlockPosition(0, 0, 0));
   }
+  if (key == 'j') {
+    grid.place(BlockType.SOURCE, new BlockPosition(0, 0, Rotation.UP, 0));
+  }
+  if (key == 'l') {
+    grid.place(BlockType.CABLE, new BlockPosition(2, 0, Rotation.UP, 0));
+    grid.place(BlockType.CABLE, new BlockPosition(2, 1, Rotation.UP, 0));
+  }
 }
 
 void mousePressed() {
