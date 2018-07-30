@@ -1,5 +1,6 @@
 Grid grid;
 Player player;
+Keyboard keyboard;
 
 void setup() {
   fullScreen();
@@ -12,6 +13,7 @@ void setup() {
 
   grid = new Grid(40, 20, 1);
   player = new Player();
+  keyboard = new Keyboard();
 
   grid.place(BlockType.SOURCE, new BlockPosition(0, 0, Rotation.UP, 0));
   grid.place(BlockType.CABLE, new BlockPosition(0, 1, Rotation.UP, 0));;
@@ -29,19 +31,25 @@ void draw() {
   //   text(i.getClass().getSimpleName(), 10, 20);
   //   // print();
   // }
-}
 
-void keyPressed() {
-  if (key == 'k') {
+  if (keyboard.keyDown('k')) {
     grid.erase(new BlockPosition(0, 0, 0));
   }
-  if (key == 'j') {
+  if (keyboard.keyDown('j')) {
     grid.place(BlockType.SOURCE, new BlockPosition(0, 0, Rotation.UP, 0));
   }
-  if (key == 'l') {
+  if (keyboard.keyDown('l')) {
     grid.place(BlockType.CABLE, new BlockPosition(2, 0, Rotation.UP, 0));
     grid.place(BlockType.CABLE, new BlockPosition(2, 1, Rotation.UP, 0));
   }
+}
+
+void keyPressed() {
+  keyboard.keyPressed(key);
+}
+
+void keyReleased() {
+  keyboard.keyReleased(key);
 }
 
 void mousePressed() {
