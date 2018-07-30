@@ -2,6 +2,23 @@ enum Rotation {
   UP, DOWN, LEFT, RIGHT
 }
 
+BlockPosition getBlockPosition(int xPosition, int yPosition) {
+  for (int x_ = 0; x_ < grid.gridWidth; x_++) {
+    for (int y_ = 0; y_ < grid.gridHeight; y_++) {
+      if (xPosition > player.translate.x + BLOCK_RATIO * x_ * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+          xPosition < player.translate.x + BLOCK_RATIO * x_ * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
+          yPosition > player.translate.y + BLOCK_RATIO * y_ * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+          yPosition < player.translate.y + BLOCK_RATIO * y_ * player.zoom + BLOCK_SIZE * player.zoom / 2) {
+
+        return new BlockPosition(x_, y_, player.selectedLayer);
+      }
+    }
+  }
+  return null;
+}
+
+// Block blockClickedByMouse = new BlockPosition(mouseX, mouseY, grid, player)
+
 class BlockPosition {
   int x, y, l;
   Rotation r;
@@ -12,6 +29,23 @@ class BlockPosition {
     r = r_;
     l = l_;
   }
+
+  // BlockPosition(int xPosition, int yPosition, Grid grid, Player player) {
+  //   for (int x_ = 0; x_ < grid.gridWidth; x_++) {
+  //     for (int y_ = 0; y_ < grid.gridHeight; y_++) {
+  //       if (xPosition > player.translate.x + BLOCK_RATIO * x_ * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+  //           xPosition < player.translate.x + BLOCK_RATIO * x_ * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
+  //           yPosition > player.translate.y + BLOCK_RATIO * y_ * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+  //           yPosition < player.translate.y + BLOCK_RATIO * y_ * player.zoom + BLOCK_SIZE * player.zoom / 2) {
+  //
+  //         x = x_;
+  //         y = y_;
+  //         r = Rotation.UP;
+  //         l = player.selectedLayer;
+  //       }
+  //     }
+  //   }
+  // }
 
   BlockPosition(int x_, int y_, int l_) {
     x = x_;

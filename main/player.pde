@@ -23,23 +23,25 @@ class Player {
     zoom = 10;
   }
 
-  void mouseTranslateUpdate() {
-    if (mousePressed && mouseButton == RIGHT) {
-      translate.x = mouseX - oldTranslate.x;
-      translate.y = mouseY - oldTranslate.y;
-    }
+  // void mouseTranslateUpdate() {
+  //   if (mousePressed && mouseButton == RIGHT) {
+  //     translate.x = mouseX - oldTranslate.x;
+  //     translate.y = mouseY - oldTranslate.y;
+  //   }
+  // }
+
+  void keyTranslateUpdate() {
+    translate.x += (int(controller.getKey('a')) - int(controller.getKey('d'))) * PAN_SPEED;
+    translate.y += (int(controller.getKey('w')) - int(controller.getKey('s'))) * PAN_SPEED;
+
   }
 
-  void updateClick() {
-    
-  }
-
-  void mouseTranslateReset() {
-    if (mouseButton == RIGHT) {
-      oldTranslate.x = mouseX - oldTranslate.x;
-      oldTranslate.y = mouseY - oldTranslate.y;
-    }
-  }
+  // void mouseTranslateReset() {
+  //   if (mouseButton == RIGHT) {
+  //     oldTranslate.x = mouseX - oldTranslate.x;
+  //     oldTranslate.y = mouseY - oldTranslate.y;
+  //   }
+  // }
 
   void mouseZoomUpdate(float scroll) {
     player.zoom -= scroll * player.zoom / 200.0f;

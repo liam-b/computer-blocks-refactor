@@ -7,7 +7,7 @@ class Block {
   boolean charge;
   boolean lastCharge;
   boolean interactionLock;
-  ArrayList<BlockPosition> inputs;
+  ArrayList<Block> inputs;
 
   BlockType type;
 
@@ -19,7 +19,7 @@ class Block {
     charge = false;
     lastCharge = false;
     interactionLock = false;
-    inputs = new ArrayList<BlockPosition>();
+    inputs = new ArrayList<Block>();
     type = type_;
 
     blockColorOn = blockColorOn_;
@@ -44,12 +44,12 @@ class Block {
     result.add(grid.getBlockAtPosition(new BlockPosition(position.x, position.y + 1, position.l)));
     result.add(grid.getBlockAtPosition(new BlockPosition(position.x, position.y - 1, position.l)));
 
+    // result.removeAll(null);
+
     return result;
   }
 
-  void update() {
-
-  }
+  void update() {}
 
   boolean mouseOver(Player player) {
     return mouseX > player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
@@ -82,21 +82,25 @@ class DirectionalBlock extends Block {
   }
 }
 
+
+
 class CableBlock extends Block {
   CableBlock(BlockPosition position_) {
     super(position_, Color.CABLE_ON, Color.CABLE_OFF, BlockType.CABLE);
   }
 
   void update() {
-    boolean j = false;
-    for (Block i : getSurroundingBlocks()) {
-      if (i != null) {
-        if (i.type == BlockType.SOURCE) {
-          j = true;
-        }
-      }
-    }
-    charge = j;
+    inputs = new ArrayList<Block>();
+    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+
+    // for (Block surroundingBlock : surroundingBlocks) {
+    //   if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.get(0) == this) || surroundingBlock.type == SOURCE)) inputs.add(surroundingBlock);
+    // }
+    //
+    // if (inputs.size() == 0) charge = false;
+    // else charge = true;
+    //
+    // updateSurroundingBlocks(surroundingBlocks, space, player, position);
   }
 }
 
@@ -105,13 +109,9 @@ class SourceBlock extends Block {
     super(position_, Color.SOURCE, Color.SOURCE, BlockType.SOURCE);
   }
 
-  void update() {
-    for (Block i : getSurroundingBlocks()) {
-      if (i != null) {
-        i.charge = true;
-      }
-    }
-  }
+  // void update() {
+  //   return true;
+  // }
 }
 
 class InverterBlock extends DirectionalBlock {

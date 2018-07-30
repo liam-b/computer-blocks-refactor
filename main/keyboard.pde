@@ -1,12 +1,13 @@
-class Keyboard {
+class Controller {
   ArrayList<Integer> keys;
 
-  Keyboard() {
+  Controller() {
+    keys = new ArrayList<Integer>();
     keys = new ArrayList<Integer>();
   }
 
   void keyPressed(char c) {
-    keys.add(int(c));
+    if (!getKey(c)) keys.add(int(c));
   }
 
   void keyReleased(char c) {
@@ -15,7 +16,11 @@ class Keyboard {
     }
   }
 
-  boolean keyDown(char c) {
+  int getMouse() {
+    return mouseButton;
+  }
+
+  boolean getKey(char c) {
     for (int k : keys) {
       if (k == int(c)) return true;
     }
