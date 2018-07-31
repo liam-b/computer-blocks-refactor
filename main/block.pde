@@ -55,8 +55,10 @@ class Block {
 
     for (Block surroundingBlock : surroundingBlocks) {
       boolean onlyItemInSurroundingBlockInputs = surroundingBlock.inputs.size() == 1 && surroundingBlock.inputs.get(0) == this;
-      if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
-      // if (surroundingBlock.type == BlockType.INVERTER && surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock.position);
+      if (surroundingBlock.type == BlockType.INVERTER) {
+        if (surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock);
+      }
+      else if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
     }
     surroundingBlocks.remove(updater);
 
@@ -88,8 +90,6 @@ class DirectionalBlock extends Block {
     if (position.r == Rotation.LEFT) rect(drawPosition.x - rectSize / 2.5 + rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
   }
 }
-
-
 
 class CableBlock extends Block {
   CableBlock(BlockPosition position_) {
@@ -128,22 +128,21 @@ class InverterBlock extends DirectionalBlock {
     blockColorOff = Color.INVERTER_OFF;
   }
 
-  // void update(Block updater) {
-  //   inputs = new ArrayList<Block>();
-  //   ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
-  //
-  //   for (Block surroundingBlock : surroundingBlocks) {
-  //     if ((!position.isFacing(surroundingBlock.position) && surroundingBlock.charge) || currentSurroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock.position);
-  //
-  //     // boolean onlyItemInSurroundingBlockInputs = surroundingBlock.inputs.size() == 1 && surroundingBlock.inputs.get(0) == this;
-  //     // if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
-  //   }
-  //   surroundingBlocks.remove(updater);
-  //
-  //   charge = inputs.size() != 0;
-  //
-  //   updateSurroundingBlocks(surroundingBlocks, this);
-  // }
+  void update(Block updater) {
+    inputs = new ArrayList<Block>();
+    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+
+    for (Block surroundingBlock : surroundingBlocks) {
+      if (!position.isFacing(surroundingBlock.position) && surroundingBlock.charge) inputs.add(surroundingBlock);
+    }
+    surroundingBlocks.remove(updater);
+
+    charge = !(inputs.size() != 0);
+    boolean willUpdateSurroundingBlocks = false;
+    if (charge != lastCharge) willUpdateSurroundingBlocks = true;
+    lastCharge = charge;
+    if (willUpdateSurroundingBlocks) updateSurroundingBlocks(surroundingBlocks, this);
+  }
 }
 
 class DelayBlock extends DirectionalBlock {
