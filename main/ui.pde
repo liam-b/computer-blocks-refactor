@@ -1,5 +1,7 @@
 class UserInterface {
 
+  ArrayList<Button> buttonArray = new ArrayList<Button>();
+
   RealPosition selectedBlockPosition = new RealPosition(UI_SCALE/2 + UI_BORDER, height - UI_SCALE/2 - UI_BORDER);
   RealPosition layerIconPosition = new RealPosition(selectedBlockPosition.x + UI_SCALE + UI_SPACING, selectedBlockPosition.y);
 
@@ -47,10 +49,85 @@ class UserInterface {
   }
 
   void drawMenu() {
+
+    selectedBlockPosition = new RealPosition(UI_SCALE/2 + UI_BORDER, height - UI_SCALE/2 - UI_BORDER);
+    layerIconPosition = new RealPosition(selectedBlockPosition.x + UI_SCALE + UI_SPACING, selectedBlockPosition.y);
+
     fill(0, 0, 0, 100);
     rect(width/2, height/2, width, height);
     fill(Color.BACKGROUND);
-    rect(width/2, height/2, width/4, height*2/3);
+    rect(width/2, height/2, MENU_WIDTH, MENU_HEIGHT);
+
+    for (Button i : buttonArray) {
+      i.draw();
+    }
+
+    textAlign(CENTER, CENTER);
+    textSize(20);
+    fill(Color.CABLE_OFF);
+    rect(width/2, height/2 - MENU_HEIGHT/2 + 30 + 2, textWidth("COMPUTER BLOCKS") + 10, 30);
+    fill(Color.BACKGROUND);
+    text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT/2 + 30);
+
   }
 
+}
+
+enum ButtonType {
+  EXIT, INCREASE_UI, DECREASE_UI, NONE
+};
+
+class Button {
+  float x, y, btnWidth, btnHeight, fontSize;
+  color col;
+  String text;
+  ButtonType buttonType;
+
+  Button(String text_, float fontSize_, float x_, float y_, float width_, float height_, color col_, ButtonType buttonType_) {
+    x = x_;
+    y = y_;
+    fontSize = fontSize_;
+    text = text_;
+    btnWidth = width_;
+    btnHeight = height_;
+    col = col_;
+    buttonType = buttonType_;
+  }
+
+  boolean pointIsEqual(float x_, float y_) {
+    if (x_ >= x-btnWidth/2 && x_ <= x+btnWidth/2 &&
+        y_ >= y-btnHeight/2 && y_ <= y+btnHeight/2) {
+        return true;
+    } else {
+      return false;
+    }
+  }
+
+  void draw() {
+    fill(col);
+    textSize(fontSize);
+    rect(x, y, btnWidth, btnHeight);
+    fill(Color.BACKGROUND);
+    text(text, x, y);
+  }
+
+  void mousePressed() {
+    if (pointIsEqual(mouseX, mouseY) && mousePressed && mouseButton == LEFT) {
+
+      switch(buttonType) {
+        case INCREASE_UI:
+          UI_SCALE += 5;
+          UI_SPACING += 1
+          ;
+          break;
+
+        case DECREASE_UI:
+          UI_SCALE -= 5;
+          UI_SPACING -= 1;
+          break;
+
+        case EXIT: exit();
+      }
+    }
+  }
 }
