@@ -10,20 +10,15 @@ class Block {
   ArrayList<Block> inputs;
 
   BlockType type;
-
   color blockColorOn;
   color blockColorOff;
 
-  Block(BlockPosition position_, color blockColorOn_, color blockColorOff_, BlockType type_) {
+  Block(BlockPosition position_) {
     position = position_;
     charge = false;
     lastCharge = false;
     interactionLock = false;
     inputs = new ArrayList<Block>();
-    type = type_;
-
-    blockColorOn = blockColorOn_;
-    blockColorOff = blockColorOff_;
   }
 
   void draw() {
@@ -44,6 +39,7 @@ class Block {
     result.add(grid.getBlockAtPosition(new BlockPosition(position.x, position.y + 1, position.l)));
     result.add(grid.getBlockAtPosition(new BlockPosition(position.x, position.y - 1, position.l)));
 
+    while (result.remove(null));
     return result;
   }
 
@@ -53,27 +49,26 @@ class Block {
     }
   }
 
-  void update(Block updater) {}
+  void update(Block updater) {
+    inputs = new ArrayList<Block>();
+    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
 
-  boolean notOnlyItemInList(ArrayList<Block> list, Block checkAgainst) {
-    if (list.size() > 1) return true;
-    for (Block block : list) {
-      if (block.position.x == checkAgainst.position.x && block.position.y == checkAgainst.position.y) return false;
+    for (Block surroundingBlock : surroundingBlocks) {
+      boolean onlyItemInSurroundingBlockInputs = surroundingBlock.inputs.size() == 1 && surroundingBlock.inputs.get(0) == this;
+      if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
+      // if (surroundingBlock.type == BlockType.INVERTER && surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock.position);
     }
-    return true;
-  }
+    surroundingBlocks.remove(updater);
 
-  boolean mouseOver(Player player) {
-    return mouseX > player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
-           mouseX < player.translate.x + BLOCK_RATIO * position.x * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
-           mouseY > player.translate.y + BLOCK_RATIO * position.y * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
-           mouseY < player.translate.y + BLOCK_RATIO * position.y * player.zoom + BLOCK_SIZE * player.zoom / 2;
+    charge = inputs.size() != 0;
+
+    updateSurroundingBlocks(surroundingBlocks, this);
   }
 }
 
 class DirectionalBlock extends Block {
-  DirectionalBlock(BlockPosition position_, color blockColorOn_, color blockColorOff_, BlockType type_) {
-    super(position_, blockColorOn_, blockColorOff_, type_);
+  DirectionalBlock(BlockPosition position_) {
+    super(position_);
   }
 
   void draw() {
@@ -98,59 +93,27 @@ class DirectionalBlock extends Block {
 
 class CableBlock extends Block {
   CableBlock(BlockPosition position_) {
-    super(position_, Color.CABLE_ON, Color.CABLE_OFF, BlockType.CABLE);
-  }
+    super(position_);
 
-  void update(Block updater) {
-    inputs = new ArrayList<Block>();
-    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
-
-    while (surroundingBlocks.remove(null));
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (surroundingBlock.charge && notOnlyItemInList(surroundingBlock.inputs, this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
-    }
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (updater.position.isEqual(surroundingBlock.position)) {
-        surroundingBlocks.remove(surroundingBlock);
-        break;
-      }
-    }
-
-    if (inputs.size() == 0) charge = false;
-    else charge = true;
-
-    updateSurroundingBlocks(surroundingBlocks, this);
+    type = BlockType.CABLE;
+    blockColorOn = Color.CABLE_ON;
+    blockColorOff = Color.CABLE_OFF;
   }
 }
 
 class SourceBlock extends Block {
   SourceBlock(BlockPosition position_) {
-    super(position_, Color.SOURCE, Color.SOURCE, BlockType.SOURCE);
+    super(position_);
+
+    type = BlockType.SOURCE;
+    blockColorOn = Color.SOURCE;
+    blockColorOff = Color.SOURCE;
   }
 
   void update(Block updater) {
-    inputs = new ArrayList<Block>();
     ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
-
-    while (surroundingBlocks.remove(null));
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.size() != 0 && surroundingBlock.inputs.get(0) != this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
-    }
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (updater.position.isEqual(surroundingBlock.position)) {
-        surroundingBlocks.remove(surroundingBlock);
-        break;
-      }
-    }
-
     surroundingBlocks.remove(updater);
-
-    if (inputs.size() == 0) charge = false;
-    else charge = true;
+    charge = true;
 
     updateSurroundingBlocks(surroundingBlocks, this);
   }
@@ -158,18 +121,47 @@ class SourceBlock extends Block {
 
 class InverterBlock extends DirectionalBlock {
   InverterBlock(BlockPosition position_) {
-    super(position_, Color.INVERTER_ON, Color.INVERTER_OFF, BlockType.INVERTER);
+    super(position_);
+
+    type = BlockType.INVERTER;
+    blockColorOn = Color.INVERTER_ON;
+    blockColorOff = Color.INVERTER_OFF;
   }
+
+  // void update(Block updater) {
+  //   inputs = new ArrayList<Block>();
+  //   ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+  //
+  //   for (Block surroundingBlock : surroundingBlocks) {
+  //     if ((!position.isFacing(surroundingBlock.position) && surroundingBlock.charge) || currentSurroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock.position);
+  //
+  //     // boolean onlyItemInSurroundingBlockInputs = surroundingBlock.inputs.size() == 1 && surroundingBlock.inputs.get(0) == this;
+  //     // if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
+  //   }
+  //   surroundingBlocks.remove(updater);
+  //
+  //   charge = inputs.size() != 0;
+  //
+  //   updateSurroundingBlocks(surroundingBlocks, this);
+  // }
 }
 
 class DelayBlock extends DirectionalBlock {
   DelayBlock(BlockPosition position_) {
-    super(position_, Color.DELAY_ON, Color.DELAY_OFF, BlockType.DELAY);
+    super(position_);
+
+    type = BlockType.DELAY;
+    blockColorOn = Color.DELAY_ON;
+    blockColorOff = Color.DELAY_OFF;
   }
 }
 
 class ViaBlock extends Block {
   ViaBlock(BlockPosition position_) {
-    super(position_, Color.VIA_ON, Color.VIA_OFF, BlockType.VIA);
+    super(position_);
+
+    type = BlockType.VIA;
+    blockColorOn = Color.VIA_ON;
+    blockColorOff = Color.VIA_OFF;
   }
 }
