@@ -25,45 +25,58 @@ class Player {
 
   void update() {
 
-    // select blockTypes
-    if (controller.getKey('1')) selectedType = BlockType.CABLE;
-    if (controller.getKey('2')) selectedType = BlockType.SOURCE;
-    if (controller.getKey('3')) selectedType = BlockType.INVERTER;
-    if (controller.getKey('4')) selectedType = BlockType.DELAY;
-    if (controller.getKey('5')) selectedType = BlockType.VIA;
-
-    // select rotation;
-    if (controller.getKey('r')) {
-      selectedRotationInt += 1;
-      controller.keyReleased('r');
-    }
-    if (selectedRotationInt > 3) selectedRotationInt = 0;
-
-    if (selectedRotationInt == 0) selectedRotation = Rotation.UP;
-    if (selectedRotationInt == 1) selectedRotation = Rotation.RIGHT;
-    if (selectedRotationInt == 2) selectedRotation = Rotation.DOWN;
-    if (selectedRotationInt == 3) selectedRotation = Rotation.LEFT;
-
-    // select layer
-    if (controller.getKey('[')) selectedLayer -= 1;
-    if (controller.getKey(']')) selectedLayer += 1;
-
-    if (controller.getKey('[') || controller.getKey(']')) {
-      if (selectedLayer < 0) selectedLayer = 0;
-      if (selectedLayer > grid.gridLayers - 1) selectedLayer = grid.gridLayers - 1;
-      controller.keyReleased('[');
-      controller.keyReleased(']');
+    // switch states
+    if (controller.getKey(char(24)) && gameState == State.GAME) {
+      gameState  = State.MENU;
+      controller.keyReleased(char(24));
+    } else if (controller.getKey(char(24)) && gameState == State.MENU) {
+      gameState  = State.GAME;
+      controller.keyReleased(char(24));
     }
 
-    // place and erase blocks
-    if (controller.getMouse() == LEFT && mousePressed) {
-      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
-      Block blockAtPos = grid.getBlockAtPosition(clickedPosition);
-      if (clickedPosition != null && blockAtPos == null) grid.place(player.selectedType, new BlockPosition(clickedPosition.x, clickedPosition.y, selectedRotation, selectedLayer));
-    }
-    if (controller.getMouse() == RIGHT && mousePressed) {
-      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
-      if (clickedPosition != null) grid.erase(clickedPosition);
+    if (gameState == State.GAME) {
+      keyTranslateUpdate();
+
+      // select blockTypes
+      if (controller.getKey('1')) selectedType = BlockType.CABLE;
+      if (controller.getKey('2')) selectedType = BlockType.SOURCE;
+      if (controller.getKey('3')) selectedType = BlockType.INVERTER;
+      if (controller.getKey('4')) selectedType = BlockType.DELAY;
+      if (controller.getKey('5')) selectedType = BlockType.VIA;
+
+      // select rotation;
+      if (controller.getKey('r')) {
+        selectedRotationInt += 1;
+        controller.keyReleased('r');
+      }
+      if (selectedRotationInt > 3) selectedRotationInt = 0;
+
+      if (selectedRotationInt == 0) selectedRotation = Rotation.UP;
+      if (selectedRotationInt == 1) selectedRotation = Rotation.RIGHT;
+      if (selectedRotationInt == 2) selectedRotation = Rotation.DOWN;
+      if (selectedRotationInt == 3) selectedRotation = Rotation.LEFT;
+
+      // select layer
+      if (controller.getKey('[')) selectedLayer -= 1;
+      if (controller.getKey(']')) selectedLayer += 1;
+
+      if (controller.getKey('[') || controller.getKey(']')) {
+        if (selectedLayer < 0) selectedLayer = 0;
+        if (selectedLayer > grid.gridLayers - 1) selectedLayer = grid.gridLayers - 1;
+        controller.keyReleased('[');
+        controller.keyReleased(']');
+      }
+
+      // place and erase blocks
+      if (controller.getMouse() == LEFT && mousePressed) {
+        BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
+        Block blockAtPos = grid.getBlockAtPosition(clickedPosition);
+        if (clickedPosition != null && blockAtPos == null) grid.place(player.selectedType, new BlockPosition(clickedPosition.x, clickedPosition.y, selectedRotation, selectedLayer));
+      }
+      if (controller.getMouse() == RIGHT && mousePressed) {
+        BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
+        if (clickedPosition != null) grid.erase(clickedPosition);
+      }
     }
   }
 

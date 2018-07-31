@@ -8,3 +8,6 @@ int PAN_SPEED = 10;
 int UI_SCALE = 75;
 int UI_BORDER = 30;
 int UI_SPACING = 20;
+
+float MENU_WIDTH;
+float MENU_HEIGHT;
