@@ -54,7 +54,7 @@ class Grid {
     if (type == BlockType.DELAY) newBlock = new DelayBlock(position);
 
     blocks.add(newBlock);
-    // newBlock.update(newBlock);
+    newBlock.update(newBlock);
   }
 
   void erase(BlockPosition position) {

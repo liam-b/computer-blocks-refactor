@@ -93,12 +93,7 @@ class DirectionalBlock extends Block {
 
 class CableBlock extends Block {
   CableBlock(BlockPosition position_) {
-    super(position_, Color.CABLE_ON, Color.CABLE_OFF, BlockType.CABLE);
-  }
-
-  void update(Block updater) {
-    inputs = new ArrayList<Block>();
-    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+    super(position_);
 
     type = BlockType.CABLE;
     blockColorOn = Color.CABLE_ON;
