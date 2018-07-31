@@ -32,7 +32,7 @@ class Grid {
 
   void drawBlocks() {
     for (Block block : blocks) {
-      block.draw();
+      if (block.position.l == player.selectedLayer) block.draw();
     }
   }
 
