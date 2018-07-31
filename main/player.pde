@@ -29,16 +29,6 @@ class Player {
     if (controller.getKey('3')) selectedType = BlockType.INVERTER;
     if (controller.getKey('4')) selectedType = BlockType.DELAY;
     if (controller.getKey('5')) selectedType = BlockType.VIA;
-
-    // place and erase
-    if (controller.getMouse() == LEFT) {
-      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
-      if (clickedPosition != null) grid.place(selectedType, clickedPosition);
-    }
-    if (controller.getMouse() == RIGHT) {
-      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
-      if (clickedPosition != null) grid.erase(clickedPosition);
-    }
   }
 
   void keyTranslateUpdate() {

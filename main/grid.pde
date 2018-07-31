@@ -10,7 +10,7 @@ class Grid {
     blocks = new ArrayList<Block>();
   }
 
-  void draw(Player player) {
+  void draw() {
     drawEmptyGrid();
     drawBlocks();
   }
@@ -39,17 +39,21 @@ class Grid {
 
   Block getBlockAtPosition(BlockPosition position) {
     for (Block block : blocks) {
-      if (block.position.isEqual(position)) return block;
+      if (block.position.isEqual(position))  {
+        // println("peen");
+        return block;
+      }
     }
     return null;
   }
 
   void place(BlockType type, BlockPosition position) {
-    if  (type == BlockType.CABLE) blocks.add(new CableBlock(position));
-    if  (type == BlockType.SOURCE) blocks.add(new SourceBlock(position));
-    if  (type == BlockType.INVERTER) blocks.add(new InverterBlock(position));
-    if  (type == BlockType.VIA) blocks.add(new ViaBlock(position));
-    if  (type == BlockType.DELAY) blocks.add(new DelayBlock(position));
+    // println("place!");
+    if (type == BlockType.CABLE) blocks.add(new CableBlock(position));
+    if (type == BlockType.SOURCE) blocks.add(new SourceBlock(position));
+    if (type == BlockType.INVERTER) blocks.add(new InverterBlock(position));
+    if (type == BlockType.VIA) blocks.add(new ViaBlock(position));
+    if (type == BlockType.DELAY) blocks.add(new DelayBlock(position));
   }
 
   void erase(BlockPosition position) {

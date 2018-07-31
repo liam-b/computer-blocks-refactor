@@ -55,8 +55,7 @@ class BlockPosition {
   }
 
   boolean isEqual(BlockPosition pos) {
-    if (x == pos.x && y == pos.y && l == pos.l) return true;
-    return false;
+    return x == pos.x && y == pos.y && l == pos.l;
   }
 
   boolean isFacing(BlockPosition pos) {
