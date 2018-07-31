@@ -54,13 +54,6 @@ class Block {
   }
 
   void update(Block updater) {}
-
-  boolean mouseOver(Player player) {
-    return mouseX > player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
-           mouseX < player.translate.x + BLOCK_RATIO * position.x * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
-           mouseY > player.translate.y + BLOCK_RATIO * position.y * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
-           mouseY < player.translate.y + BLOCK_RATIO * position.y * player.zoom + BLOCK_SIZE * player.zoom / 2;
-  }
 }
 
 class DirectionalBlock extends Block {
@@ -93,26 +86,6 @@ class CableBlock extends Block {
     super(position_, Color.CABLE_ON, Color.CABLE_OFF, BlockType.CABLE);
   }
 
-  void update(Block updater) {
-    inputs = new ArrayList<Block>();
-    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.get(0) == this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
-    }
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (updater.position.isEqual(surroundingBlock.position)) {
-        surroundingBlocks.remove(surroundingBlock);
-        break;
-      }
-    }
-
-    if (inputs.size() == 0) charge = false;
-    else charge = true;
-
-    updateSurroundingBlocks(surroundingBlocks, this);
-  }
 }
 
 class SourceBlock extends Block {
@@ -120,25 +93,6 @@ class SourceBlock extends Block {
     super(position_, Color.SOURCE, Color.SOURCE, BlockType.SOURCE);
   }
 
-  void update(Block updater) {
-    inputs = new ArrayList<Block>();
-    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.get(0) == this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
-    }
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      if (updater.position.isEqual(surroundingBlock.position)) {
-        surroundingBlocks.remove(surroundingBlock);
-        break;
-      }
-    }
-
-    charge = true;
-
-    updateSurroundingBlocks(surroundingBlocks, this);
-  }
 }
 
 class InverterBlock extends DirectionalBlock {

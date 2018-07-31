@@ -10,4 +10,6 @@ static class Color {
   static color VIA_ON = #75BDEA;
   static color DELAY_OFF = #59C664;
   static color DELAY_ON = #62DB6E;
+
+  static color UI_BACKGROUND = #E0E0E0;
 }
