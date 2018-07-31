@@ -187,7 +187,7 @@ class DelayBlock extends DirectionalBlock {
   void tickUpdate() {
     if (nextTickCharge != charge) {
       charge = nextTickCharge;
-      draw();
+      if (player.selectedLayer == position.l) draw();
     }
   }
 }
