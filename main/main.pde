@@ -35,7 +35,9 @@ void draw() {
   player.update();
   ui.update();
 
-  if (player.gameState == State.MENU) ui.drawMenu();
+  if (frameCount % 10 == 0) grid.tickBlocks();
+
+  if (controller.getKey(char(24))) ui.drawMenu();
 
 }
 
