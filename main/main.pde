@@ -37,7 +37,6 @@ void draw() {
 
   if (player.gameState == State.MENU) ui.drawMenu();
   if (frameCount % 10 == 0) grid.tickBlocks();
-
 }
 
 void keyPressed() {
