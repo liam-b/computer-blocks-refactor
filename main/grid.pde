@@ -32,15 +32,13 @@ class Grid {
 
   void drawBlocks() {
     for (Block block : blocks) {
-      block.draw(player);
-      block.update();
+      block.draw();
     }
   }
 
   Block getBlockAtPosition(BlockPosition position) {
     for (Block block : blocks) {
       if (block.position.isEqual(position))  {
-        // println("peen");
         return block;
       }
     }
@@ -48,12 +46,15 @@ class Grid {
   }
 
   void place(BlockType type, BlockPosition position) {
-    // println("place!");
-    if (type == BlockType.CABLE) blocks.add(new CableBlock(position));
-    if (type == BlockType.SOURCE) blocks.add(new SourceBlock(position));
-    if (type == BlockType.INVERTER) blocks.add(new InverterBlock(position));
-    if (type == BlockType.VIA) blocks.add(new ViaBlock(position));
-    if (type == BlockType.DELAY) blocks.add(new DelayBlock(position));
+    Block newBlock = new CableBlock(position);
+    if (type == BlockType.CABLE) newBlock = new CableBlock(position);
+    if (type == BlockType.SOURCE) newBlock = new SourceBlock(position);
+    if (type == BlockType.INVERTER) newBlock = new InverterBlock(position);
+    if (type == BlockType.VIA) newBlock = new ViaBlock(position);
+    if (type == BlockType.DELAY) newBlock = new DelayBlock(position);
+
+    blocks.add(newBlock);
+    newBlock.update(newBlock);
   }
 
   void erase(BlockPosition position) {

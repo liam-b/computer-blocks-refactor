@@ -22,13 +22,24 @@ class Player {
   }
 
   void update() {
-
     // selecting blockTypes
     if (controller.getKey('1')) selectedType = BlockType.CABLE;
     if (controller.getKey('2')) selectedType = BlockType.SOURCE;
     if (controller.getKey('3')) selectedType = BlockType.INVERTER;
     if (controller.getKey('4')) selectedType = BlockType.DELAY;
     if (controller.getKey('5')) selectedType = BlockType.VIA;
+
+    // place and erase blocks
+    if (controller.getMouse() == LEFT) {
+      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
+      Block blockAtPos = grid.getBlockAtPosition(clickedPosition);
+      if (clickedPosition != null && blockAtPos == null) grid.place(player.selectedType, clickedPosition);
+    }
+    if (controller.getMouse() == RIGHT) {
+      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
+      if (clickedPosition != null) grid.erase(clickedPosition);
+    }
+
   }
 
   void keyTranslateUpdate() {

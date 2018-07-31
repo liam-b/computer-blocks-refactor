@@ -1,6 +1,7 @@
 Grid grid;
 Player player;
 Controller controller;
+UserInterface ui;
 
 void setup() {
   fullScreen();
@@ -14,6 +15,8 @@ void setup() {
   grid = new Grid(40, 20, 1);
   player = new Player();
   controller = new Controller();
+  ui = new UserInterface();
+
 }
 
 void draw() {
@@ -23,25 +26,25 @@ void draw() {
   grid.draw();
   player.update();
 
-  if (controller.getMouse() == LEFT) {
-    BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
-    if (clickedPosition != null) {
-      Block blockAtPos = grid.getBlockAtPosition(clickedPosition);
-      println(str(grid.blocks.size()));
-      if (blockAtPos == null) grid.place(player.selectedType, clickedPosition);
-    }
+  if (controller.getKey(char(24))) {
+    fill(0, 0, 0, 100);
+    rect(width/2, height/2, width, height);
+    fill(Color.BACKGROUND);
+    rect(width/2, height/2, width/4, height*2/3);
+
   }
-  if (controller.getMouse() == RIGHT) {
-    BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
-    if (clickedPosition != null) grid.erase(clickedPosition);
-  }
+
 }
 
 void keyPressed() {
+  if (key == 27) key = 24;
+  if (key == 127) key = 27;
   controller.keyPressed(key);
 }
 
 void keyReleased() {
+  if (key == 27) key = 24;
+  if (key == 127) key = 27;
   controller.keyReleased(key);
 }
 
