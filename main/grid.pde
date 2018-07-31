@@ -61,6 +61,8 @@ class Grid {
     for (Block block : blocks) {
       if (block.position.isEqual(position)) {
         blocks.remove(block);
+        block.updateSurroundingBlocks(block.getSurroundingBlocks(), block);
+        block = null;
         break;
       }
     }

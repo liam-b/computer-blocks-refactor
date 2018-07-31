@@ -49,11 +49,19 @@ class Block {
 
   void updateSurroundingBlocks(ArrayList<Block> surroundingBlocks, Block updater) {
     for (Block surroundingBlock : surroundingBlocks) {
-      surroundingBlock.update(updater);
+      if (surroundingBlock != null) surroundingBlock.update(updater);
     }
   }
 
   void update(Block updater) {}
+
+  boolean notOnlyItemInList(ArrayList<Block> list, Block checkAgainst) {
+    if (list.size() > 1) return true;
+    for (Block block : list) {
+      if (block.position.x == checkAgainst.position.x && block.position.y == checkAgainst.position.y) return false;
+    }
+    return true;
+  }
 
   boolean mouseOver(Player player) {
     return mouseX > player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
@@ -97,8 +105,10 @@ class CableBlock extends Block {
     inputs = new ArrayList<Block>();
     ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
 
+    while (surroundingBlocks.remove(null));
+
     for (Block surroundingBlock : surroundingBlocks) {
-      if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.get(0) == this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
+      if (surroundingBlock.charge && notOnlyItemInList(surroundingBlock.inputs, this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
     }
 
     for (Block surroundingBlock : surroundingBlocks) {
@@ -124,8 +134,10 @@ class SourceBlock extends Block {
     inputs = new ArrayList<Block>();
     ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
 
+    while (surroundingBlocks.remove(null));
+
     for (Block surroundingBlock : surroundingBlocks) {
-      if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.get(0) == this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
+      if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.size() != 0 && surroundingBlock.inputs.get(0) != this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
     }
 
     for (Block surroundingBlock : surroundingBlocks) {
@@ -135,7 +147,10 @@ class SourceBlock extends Block {
       }
     }
 
-    charge = true;
+    surroundingBlocks.remove(updater);
+
+    if (inputs.size() == 0) charge = false;
+    else charge = true;
 
     updateSurroundingBlocks(surroundingBlocks, this);
   }
