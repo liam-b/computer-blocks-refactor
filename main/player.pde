@@ -8,7 +8,6 @@ class Player {
   int selectedLayer;
 
   RealPosition translate;
-  RealPosition oldTranslate;
   RealPosition zoomTranslate;
   float zoom;
 
@@ -18,30 +17,35 @@ class Player {
     selectedLayer = 0;
 
     translate = new RealPosition(0, 0);
-    oldTranslate = new RealPosition(0, 0);
     zoomTranslate = new RealPosition(0, 0);
     zoom = 10;
   }
 
-  // void mouseTranslateUpdate() {
-  //   if (mousePressed && mouseButton == RIGHT) {
-  //     translate.x = mouseX - oldTranslate.x;
-  //     translate.y = mouseY - oldTranslate.y;
-  //   }
-  // }
+  void update() {
+
+    // selecting blockTypes
+    if (controller.getKey('1')) selectedType = BlockType.CABLE;
+    if (controller.getKey('2')) selectedType = BlockType.SOURCE;
+    if (controller.getKey('3')) selectedType = BlockType.INVERTER;
+    if (controller.getKey('4')) selectedType = BlockType.DELAY;
+    if (controller.getKey('5')) selectedType = BlockType.VIA;
+
+    // place and erase
+    if (controller.getMouse() == LEFT) {
+      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
+      if (clickedPosition != null) grid.place(selectedType, clickedPosition);
+    }
+    if (controller.getMouse() == RIGHT) {
+      BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
+      if (clickedPosition != null) grid.erase(clickedPosition);
+    }
+  }
 
   void keyTranslateUpdate() {
     translate.x += (int(controller.getKey('a')) - int(controller.getKey('d'))) * PAN_SPEED;
     translate.y += (int(controller.getKey('w')) - int(controller.getKey('s'))) * PAN_SPEED;
 
   }
-
-  // void mouseTranslateReset() {
-  //   if (mouseButton == RIGHT) {
-  //     oldTranslate.x = mouseX - oldTranslate.x;
-  //     oldTranslate.y = mouseY - oldTranslate.y;
-  //   }
-  // }
 
   void mouseZoomUpdate(float scroll) {
     player.zoom -= scroll * player.zoom / 200.0f;

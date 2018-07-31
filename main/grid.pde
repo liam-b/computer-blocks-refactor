@@ -45,14 +45,6 @@ class Grid {
   }
 
   void place(BlockType type, BlockPosition position) {
-    // switch (type) {
-    //   case BlockType.CABLE: blocks.add(new CableBlock(position));
-    //   case BlockType.SOURCE: blocks.add(new SourceBlock(position));
-    //   case BlockType.INVERTER: blocks.add(new InverterBlock(position));
-    //   case BlockType.VIA: blocks.add(new ViaBlock(position));
-    //   case BlockType.DELAY: blocks.add(new DelayBlock(position));
-    // }
-
     if  (type == BlockType.CABLE) blocks.add(new CableBlock(position));
     if  (type == BlockType.SOURCE) blocks.add(new SourceBlock(position));
     if  (type == BlockType.INVERTER) blocks.add(new InverterBlock(position));

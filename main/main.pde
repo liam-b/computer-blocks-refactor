@@ -26,10 +26,11 @@ void draw() {
   player.keyTranslateUpdate();
   grid.update(player);
   grid.draw(player);
+  player.update();
 
   if (controller.getMouse() == LEFT) {
     BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
-    if (clickedPosition != null) grid.place(BlockType.CABLE, clickedPosition);
+    if (clickedPosition != null && grid.getBlockAtPosition(clickedPosition) == null) grid.place(BlockType.CABLE, clickedPosition);
   }
   if (controller.getKey('j')) {
     grid.place(BlockType.SOURCE, new BlockPosition(0, 0, Rotation.UP, 0));
