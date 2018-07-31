@@ -31,14 +31,14 @@ void draw() {
 }
 
 void keyPressed() {
-  if (key == 27) key = 24;
-  if (key == 127) key = 27;
+  // if (key == 27) key = 24;
+  // if (key == 127) key = 27;
   controller.keyPressed(key);
 }
 
 void keyReleased() {
-  if (key == 27) key = 24;
-  if (key == 127) key = 27;
+  // if (key == 27) key = 24;
+  // if (key == 127) key = 27;
   controller.keyReleased(key);
 }
 

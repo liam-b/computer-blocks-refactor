@@ -49,11 +49,29 @@ class Block {
 
   void updateSurroundingBlocks(ArrayList<Block> surroundingBlocks, Block updater) {
     for (Block surroundingBlock : surroundingBlocks) {
-      surroundingBlock.update(updater);
+      if (surroundingBlock != null) surroundingBlock.update(updater);
     }
   }
 
   void update(Block updater) {}
+<<<<<<< HEAD
+=======
+
+  boolean notOnlyItemInList(ArrayList<Block> list, Block checkAgainst) {
+    if (list.size() > 1) return true;
+    for (Block block : list) {
+      if (block.position.x == checkAgainst.position.x && block.position.y == checkAgainst.position.y) return false;
+    }
+    return true;
+  }
+
+  boolean mouseOver(Player player) {
+    return mouseX > player.translate.x + BLOCK_RATIO * position.x * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+           mouseX < player.translate.x + BLOCK_RATIO * position.x * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
+           mouseY > player.translate.y + BLOCK_RATIO * position.y * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+           mouseY < player.translate.y + BLOCK_RATIO * position.y * player.zoom + BLOCK_SIZE * player.zoom / 2;
+  }
+>>>>>>> f887687c36cd5f5fae92a531fac7f7b8e7051dfe
 }
 
 class DirectionalBlock extends Block {
@@ -86,6 +104,31 @@ class CableBlock extends Block {
     super(position_, Color.CABLE_ON, Color.CABLE_OFF, BlockType.CABLE);
   }
 
+<<<<<<< HEAD
+=======
+  void update(Block updater) {
+    inputs = new ArrayList<Block>();
+    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+
+    while (surroundingBlocks.remove(null));
+
+    for (Block surroundingBlock : surroundingBlocks) {
+      if (surroundingBlock.charge && notOnlyItemInList(surroundingBlock.inputs, this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
+    }
+
+    for (Block surroundingBlock : surroundingBlocks) {
+      if (updater.position.isEqual(surroundingBlock.position)) {
+        surroundingBlocks.remove(surroundingBlock);
+        break;
+      }
+    }
+
+    if (inputs.size() == 0) charge = false;
+    else charge = true;
+
+    updateSurroundingBlocks(surroundingBlocks, this);
+  }
+>>>>>>> f887687c36cd5f5fae92a531fac7f7b8e7051dfe
 }
 
 class SourceBlock extends Block {
@@ -93,6 +136,33 @@ class SourceBlock extends Block {
     super(position_, Color.SOURCE, Color.SOURCE, BlockType.SOURCE);
   }
 
+<<<<<<< HEAD
+=======
+  void update(Block updater) {
+    inputs = new ArrayList<Block>();
+    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+
+    while (surroundingBlocks.remove(null));
+
+    for (Block surroundingBlock : surroundingBlocks) {
+      if (surroundingBlock.charge && (surroundingBlock.inputs.size() > 1 && surroundingBlock.inputs.size() != 0 && surroundingBlock.inputs.get(0) != this) || surroundingBlock.type == BlockType.SOURCE) inputs.add(surroundingBlock);
+    }
+
+    for (Block surroundingBlock : surroundingBlocks) {
+      if (updater.position.isEqual(surroundingBlock.position)) {
+        surroundingBlocks.remove(surroundingBlock);
+        break;
+      }
+    }
+
+    surroundingBlocks.remove(updater);
+
+    if (inputs.size() == 0) charge = false;
+    else charge = true;
+
+    updateSurroundingBlocks(surroundingBlocks, this);
+  }
+>>>>>>> f887687c36cd5f5fae92a531fac7f7b8e7051dfe
 }
 
 class InverterBlock extends DirectionalBlock {
