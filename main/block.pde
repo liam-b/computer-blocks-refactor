@@ -115,7 +115,7 @@ class SourceBlock extends Block {
     surroundingBlocks.remove(updater);
     charge = true;
 
-    updateSurroundingBlocks(surroundingBlocks, this);
+    updateSurroundingBlocks(surroundingBlocks, thi);
   }
 }
 
