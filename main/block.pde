@@ -53,9 +53,13 @@ class Block {
     inputs = new ArrayList<Block>();
     ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
 
+    for (Block additionalBlock : getAdditionalBlocks()) {
+      surroundingBlocks.add(additionalBlock);
+    }
+
     for (Block surroundingBlock : surroundingBlocks) {
       boolean onlyItemInSurroundingBlockInputs = surroundingBlock.inputs.size() == 1 && surroundingBlock.inputs.get(0) == this;
-      if (surroundingBlock.type == BlockType.INVERTER) {
+      if (surroundingBlock.type == BlockType.INVERTER || surroundingBlock.type == BlockType.DELAY) {
         if (surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock);
       }
       else if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
@@ -66,6 +70,9 @@ class Block {
 
     updateSurroundingBlocks(surroundingBlocks, this);
   }
+
+  ArrayList<Block> getAdditionalBlocks() { return new ArrayList<Block>(); }
+  void tickUpdate() {}
 }
 
 class DirectionalBlock extends Block {
@@ -133,25 +140,55 @@ class InverterBlock extends DirectionalBlock {
     ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
 
     for (Block surroundingBlock : surroundingBlocks) {
-      if (!position.isFacing(surroundingBlock.position) && surroundingBlock.charge) inputs.add(surroundingBlock);
+      if (surroundingBlock.type == BlockType.INVERTER || surroundingBlock.type == BlockType.DELAY) {
+        if (surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock);
+      }
+      else if (!position.isFacing(surroundingBlock.position) && surroundingBlock.charge) inputs.add(surroundingBlock);
     }
     surroundingBlocks.remove(updater);
 
     charge = !(inputs.size() != 0);
-    boolean willUpdateSurroundingBlocks = false;
-    if (charge != lastCharge) willUpdateSurroundingBlocks = true;
+    boolean willUpdateSurroundingBlocks = charge != lastCharge;
     lastCharge = charge;
     if (willUpdateSurroundingBlocks) updateSurroundingBlocks(surroundingBlocks, this);
   }
 }
 
 class DelayBlock extends DirectionalBlock {
+  boolean nextTickCharge;
+
   DelayBlock(BlockPosition position_) {
     super(position_);
 
     type = BlockType.DELAY;
     blockColorOn = Color.DELAY_ON;
     blockColorOff = Color.DELAY_OFF;
+  }
+
+  void update(Block updater) {
+    inputs = new ArrayList<Block>();
+    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+
+    for (Block additionalBlock : getAdditionalBlocks()) {
+      surroundingBlocks.add(additionalBlock);
+    }
+
+    for (Block surroundingBlock : surroundingBlocks) {
+      if (surroundingBlock.type == BlockType.INVERTER || surroundingBlock.type == BlockType.DELAY) {
+        if (surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock);
+      }
+      else if (!position.isFacing(surroundingBlock.position) && surroundingBlock.charge) inputs.add(surroundingBlock);
+    }
+    surroundingBlocks.remove(updater);
+
+    nextTickCharge = inputs.size() != 0;
+  }
+
+  void tickUpdate() {
+    if (nextTickCharge != charge) {
+      charge = nextTickCharge;
+      draw();
+    }
   }
 }
 
@@ -164,29 +201,7 @@ class ViaBlock extends Block {
     blockColorOff = Color.VIA_OFF;
   }
 
-  void update(Block updater) {
-    inputs = new ArrayList<Block>();
-    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
-
-    for (Block surroundingVia : getSurroundingVias()) {
-      surroundingBlocks.add(surroundingVia);
-    }
-
-    for (Block surroundingBlock : surroundingBlocks) {
-      boolean onlyItemInSurroundingBlockInputs = surroundingBlock.inputs.size() == 1 && surroundingBlock.inputs.get(0) == this;
-      if (surroundingBlock.type == BlockType.INVERTER) {
-        if (surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock);
-      }
-      else if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
-    }
-    surroundingBlocks.remove(updater);
-
-    charge = inputs.size() != 0;
-
-    updateSurroundingBlocks(surroundingBlocks, this);
-  }
-
-  ArrayList<Block> getSurroundingVias() {
+  ArrayList<Block> getAdditionalBlocks() {
     ArrayList<Block> result = new ArrayList<Block>();
     for (int l = 0; l < grid.gridLayers; l++) {
       Block foundBlock = grid.getBlockAtPosition(new BlockPosition(position.x, position.y, l));

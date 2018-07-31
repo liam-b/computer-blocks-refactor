@@ -67,4 +67,18 @@ class Grid {
       }
     }
   }
+
+  void tickBlocks() {
+    ArrayList<Block> queue = new ArrayList<Block>();
+    for (Block block : blocks) {
+      if (block.type == BlockType.DELAY) {
+        block.tickUpdate();
+        queue.add(block);
+      }
+    }
+
+    for (Block block : queue) {
+      block.updateSurroundingBlocks(block.getSurroundingBlocks(), block);
+    }
+  }
 }

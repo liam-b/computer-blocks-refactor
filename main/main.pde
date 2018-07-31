@@ -36,6 +36,7 @@ void draw() {
   ui.update();
 
   if (player.gameState == State.MENU) ui.drawMenu();
+  if (frameCount % 10 == 0) grid.tickBlocks();
 
 }
 
@@ -56,7 +57,9 @@ void mouseWheel(MouseEvent event) {
 }
 
 void mousePressed() {
-  for (Button i : ui.buttonArray) {
-    i.mousePressed();
+  if (player.gameState == State.MENU) {
+    for (Button i : ui.buttonArray) {
+      i.mousePressed();
+    }
   }
 }
