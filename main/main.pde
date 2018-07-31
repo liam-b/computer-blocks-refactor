@@ -26,6 +26,8 @@ void draw() {
   player.update();
   ui.update();
 
+  if (frameCount % 10 == 0) grid.tickBlocks();
+
   if (controller.getKey(char(24))) ui.drawMenu();
 
 }
