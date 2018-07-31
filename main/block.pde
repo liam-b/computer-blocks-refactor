@@ -115,7 +115,7 @@ class SourceBlock extends Block {
     surroundingBlocks.remove(updater);
     charge = true;
 
-    updateSurroundingBlocks(surroundingBlocks, thi);
+    updateSurroundingBlocks(surroundingBlocks, this);
   }
 }
 
@@ -162,5 +162,37 @@ class ViaBlock extends Block {
     type = BlockType.VIA;
     blockColorOn = Color.VIA_ON;
     blockColorOff = Color.VIA_OFF;
+  }
+
+  void update(Block updater) {
+    inputs = new ArrayList<Block>();
+    ArrayList<Block> surroundingBlocks = getSurroundingBlocks();
+
+    for (Block surroundingVia : getSurroundingVias()) {
+      surroundingBlocks.add(surroundingVia);
+    }
+
+    for (Block surroundingBlock : surroundingBlocks) {
+      boolean onlyItemInSurroundingBlockInputs = surroundingBlock.inputs.size() == 1 && surroundingBlock.inputs.get(0) == this;
+      if (surroundingBlock.type == BlockType.INVERTER) {
+        if (surroundingBlock.position.isFacing(position) && surroundingBlock.charge) inputs.add(surroundingBlock);
+      }
+      else if (surroundingBlock.charge && !onlyItemInSurroundingBlockInputs) inputs.add(surroundingBlock);
+    }
+    surroundingBlocks.remove(updater);
+
+    charge = inputs.size() != 0;
+
+    updateSurroundingBlocks(surroundingBlocks, this);
+  }
+
+  ArrayList<Block> getSurroundingVias() {
+    ArrayList<Block> result = new ArrayList<Block>();
+    for (int l = 0; l < grid.gridLayers; l++) {
+      Block foundBlock = grid.getBlockAtPosition(new BlockPosition(position.x, position.y, l));
+      if (foundBlock != null && foundBlock.type == BlockType.VIA && foundBlock.position.l != position.l) result.add(foundBlock);
+    }
+
+    return result;
   }
 }

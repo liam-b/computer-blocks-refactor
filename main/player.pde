@@ -24,7 +24,7 @@ class Player {
   }
 
   void update() {
-    
+
     // select blockTypes
     if (controller.getKey('1')) selectedType = BlockType.CABLE;
     if (controller.getKey('2')) selectedType = BlockType.SOURCE;
@@ -56,12 +56,12 @@ class Player {
     }
 
     // place and erase blocks
-    if (controller.getMouse() == LEFT) {
+    if (controller.getMouse() == LEFT && mousePressed) {
       BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
       Block blockAtPos = grid.getBlockAtPosition(clickedPosition);
       if (clickedPosition != null && blockAtPos == null) grid.place(player.selectedType, new BlockPosition(clickedPosition.x, clickedPosition.y, selectedRotation, selectedLayer));
     }
-    if (controller.getMouse() == RIGHT) {
+    if (controller.getMouse() == RIGHT && mousePressed) {
       BlockPosition clickedPosition = getBlockPosition(mouseX, mouseY);
       if (clickedPosition != null) grid.erase(clickedPosition);
     }
