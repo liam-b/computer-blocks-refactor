@@ -3,11 +3,12 @@ Player player;
 Controller controller;
 UserInterface ui;
 
-Button exitButton;
-Button windowButton;
+// Button exitButton;
+// Button windowButton;
 
 void setup() {
   fullScreen();
+  // size(500, 500);
   pixelDensity(2);
   frameRate(60);
   cursor(CROSS);
@@ -15,7 +16,9 @@ void setup() {
   noStroke();
   background(Color.BACKGROUND);
 
-  grid = new Grid(40, 20, 5);
+  // println(BlockType.values()[3].ordinal().getClass().getName());
+
+  grid = new Grid(200, 200, 5);
   player = new Player();
   controller = new Controller();
   ui = new UserInterface();
@@ -37,6 +40,14 @@ void draw() {
 
   if (player.gameState == State.MENU) ui.drawMenu();
   if (frameCount % 10 == 0) grid.tickBlocks();
+
+  if (controller.getKey('o')) {
+    saveGrid("game");
+  }
+
+  if (controller.getKey('p')) {
+    loadGrid("game");
+  }
 }
 
 void keyPressed() {
