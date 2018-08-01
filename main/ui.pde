@@ -45,7 +45,7 @@ class UserInterface {
 
     // draw layer icon
     drawBlock(layerIconPosition.x, layerIconPosition.y, UI_SCALE, UI_SCALE, Color.UI_BACKGROUND);
-    drawBlock(layerIconPosition.x, layerIconPosition.y + UI_SCALE/2 - UI_SCALE / grid.gridLayers / 2 - player.selectedLayer * (UI_SCALE / grid.gridLayers), UI_SCALE*0.9, UI_SCALE*0.9/grid.gridLayers, Color.CABLE_OFF);
+    drawBlock(layerIconPosition.x, layerIconPosition.y + UI_SCALE*0.9/2 - UI_SCALE / grid.gridLayers / 2 - player.selectedLayer * (UI_SCALE*0.9 / grid.gridLayers), UI_SCALE*0.9, UI_SCALE*0.9/grid.gridLayers, Color.CABLE_OFF);
   }
 
   void drawMenu() {
