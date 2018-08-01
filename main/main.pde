@@ -27,9 +27,10 @@ void setup() {
   MENU_HEIGHT = height*2/3;
 
   ui.buttonArray.add(new Button("QUIT", 40, width/2, height/3, MENU_WIDTH*0.9, height/10, Color.CABLE_OFF, ButtonType.EXIT));
-  ui.buttonArray.add(new Button("UI_SCALE", 40, width/2, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.4, height/10, Color.CABLE_OFF, ButtonType.NONE));
-  ui.buttonArray.add(new Button("+", 40, width/2 + MENU_WIDTH*0.3, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.1, height/10, Color.CABLE_OFF, ButtonType.INCREASE_UI));
-  ui.buttonArray.add(new Button("-", 40, width/2 - MENU_WIDTH*0.3, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.1, height/10, Color.CABLE_OFF, ButtonType.DECREASE_UI));
+  ui.buttonArray.add(new Button("X", 20, width - 60, 60, 40, 40, #CE4E4A, #a24c4a, ButtonType.EXIT_MENU));
+  ui.buttonArray.add(new Button("UI_SCALE", 40, width/2, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.47, height/10, Color.CABLE_OFF, ButtonType.NONE));
+  ui.buttonArray.add(new Button("+", 40, width/2 + MENU_WIDTH*0.35, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.2, height/10, Color.CABLE_OFF, ButtonType.INCREASE_UI));
+  ui.buttonArray.add(new Button("-", 40, width/2 - MENU_WIDTH*0.35, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.2, height/10, Color.CABLE_OFF, ButtonType.DECREASE_UI));
 }
 
 void draw() {
@@ -40,6 +41,8 @@ void draw() {
 
   if (player.gameState == State.MENU) ui.drawMenu();
   if (frameCount % 10 == 0) grid.tickBlocks();
+
+  cursor((player.gameState == State.MENU) ? ARROW : CROSS);
 
   if (controller.getKey('o')) {
     saveGrid("game");

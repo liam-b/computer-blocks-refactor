@@ -55,6 +55,9 @@ class UserInterface {
 
     fill(0, 0, 0, 100);
     rect(width/2, height/2, width, height);
+
+    fill(124, 124, 124);
+    rect(width/2, height/2, MENU_WIDTH + 8, MENU_HEIGHT + 8);
     fill(Color.BACKGROUND);
     rect(width/2, height/2, MENU_WIDTH, MENU_HEIGHT);
 
@@ -63,27 +66,41 @@ class UserInterface {
     }
 
     textAlign(CENTER, CENTER);
-    textSize(20);
+    textSize(60);
+    fill(124, 124, 124);
+    text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425 + 4);
     fill(Color.CABLE_OFF);
-    rect(width/2, height/2 - MENU_HEIGHT/2 + 30 + 2, textWidth("COMPUTER BLOCKS") + 10, 30);
-    fill(Color.BACKGROUND);
-    text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT/2 + 30);
+    text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425);
 
   }
 
 }
 
 enum ButtonType {
-  EXIT, INCREASE_UI, DECREASE_UI, NONE
+  EXIT, INCREASE_UI, DECREASE_UI, EXIT_MENU, NONE
 };
 
 class Button {
   float x, y, btnWidth, btnHeight, fontSize;
   color col;
+  color shadowColor;
   String text;
   ButtonType buttonType;
 
   Button(String text_, float fontSize_, float x_, float y_, float width_, float height_, color col_, ButtonType buttonType_) {
+    x = x_;
+    y = y_;
+    fontSize = fontSize_;
+    text = text_;
+    btnWidth = width_;
+    btnHeight = height_;
+    col = col_;
+    buttonType = buttonType_;
+    shadowColor = color(124, 124, 124);
+  }
+
+  Button(String text_, float fontSize_, float x_, float y_, float width_, float height_, color col_, color shadowColor_, ButtonType buttonType_) {
+    shadowColor = shadowColor_;
     x = x_;
     y = y_;
     fontSize = fontSize_;
@@ -104,11 +121,18 @@ class Button {
   }
 
   void draw() {
+    fill(shadowColor);
+    rect(x, y+4, btnWidth, btnHeight);
     fill(col);
     textSize(fontSize);
     rect(x, y, btnWidth, btnHeight);
     fill(Color.BACKGROUND);
     text(text, x, y);
+
+    if (pointIsEqual(mouseX, mouseY) && buttonType != ButtonType.NONE) {
+      fill(255, 255, 255, 64);
+      rect(x, y, btnWidth, btnHeight);
+    }
   }
 
   void mousePressed() {
@@ -124,6 +148,10 @@ class Button {
         case DECREASE_UI:
           UI_SCALE -= 5;
           UI_SPACING -= 1;
+          break;
+
+        case EXIT_MENU:
+          player.gameState = State.GAME;
           break;
 
         case EXIT: exit();
