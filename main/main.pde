@@ -6,6 +6,8 @@ UserInterface ui;
 // Button exitButton;
 // Button windowButton;
 
+//save everything (copy paste, save files) as snippets and jiust load and save them as / from json
+
 void setup() {
   fullScreen();
   // size(500, 500);
@@ -16,9 +18,7 @@ void setup() {
   noStroke();
   background(Color.BACKGROUND);
 
-  // println(BlockType.values()[3].ordinal().getClass().getName());
-
-  grid = new Grid(200, 200, 5);
+  grid = new Grid(200, 200, 6);
   player = new Player();
   controller = new Controller();
   ui = new UserInterface();
@@ -45,11 +45,16 @@ void draw() {
   cursor((player.gameState == State.MENU) ? ARROW : CROSS);
 
   if (controller.getKey('o')) {
-    saveGrid("game");
+    Snippet snippet = new Snippet(grid);
+    snippet.save("snippets/", "test");
   }
 
   if (controller.getKey('p')) {
-    loadGrid("game");
+    grid = new Grid(new Snippet("snippets/", "test"));
+  }
+
+  if (controller.getKey('l')) {
+    grid.addSnippetAtPosition(new Snippet("snippets/", "test"), new BlockPosition(10, 10, 0));
   }
 }
 

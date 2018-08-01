@@ -1,21 +1,15 @@
-void saveGrid(String name) {
-  JSONObject json = new JSONObject();
-  json.setString("name", name);
-  json.setInt("width", grid.gridWidth);
-  json.setInt("height", grid.gridHeight);
-  json.setInt("layers", grid.gridLayers);
-
-  JSONArray gridJSON = new JSONArray();
-  for (int i = 0; i < grid.blocks.size(); i++) {
-    Block block = grid.blocks.get(i);
+JSONArray blocksToJSON(ArrayList<Block> blocks, BlockPosition offset) {
+  JSONArray blocksJSON = new JSONArray();
+  for (int i = 0; i < blocks.size(); i++) {
+    Block block = blocks.get(i);
 
     JSONObject blockJSON = new JSONObject();
     blockJSON.setInt("type", block.type.ordinal());
-    blockJSON.setJSONObject("position", getJSONFromPosition(block.position));
+    blockJSON.setJSONObject("position", getJSONFromPosition(block.position.subtract(offset)));
 
     JSONArray inputsJSON = new JSONArray();
     for (int j = 0; j < block.inputs.size(); j++) {
-      inputsJSON.setJSONObject(j, getJSONFromPosition(block.inputs.get(j).position));
+      inputsJSON.setJSONObject(j, getJSONFromPosition(block.inputs.get(j).position.subtract(offset)));
     }
     blockJSON.setJSONArray("inputs", inputsJSON);
 
@@ -24,11 +18,10 @@ void saveGrid(String name) {
     blockJSON.setBoolean("interactionLock", block.interactionLock);
     blockJSON.setBoolean("nextTickCharge", block.nextTickCharge);
 
-    gridJSON.setJSONObject(i, blockJSON);
+    blocksJSON.setJSONObject(i, blockJSON);
   }
 
-  json.setJSONArray("grid", gridJSON);
-  saveJSONObject(json, name + ".json");
+  return blocksJSON;
 }
 
 JSONObject getJSONFromPosition(BlockPosition position) {
@@ -40,14 +33,11 @@ JSONObject getJSONFromPosition(BlockPosition position) {
   return json;
 }
 
-void loadGrid(String name) {
-  JSONObject json = loadJSONObject(name + ".json");
-  Grid newGrid = new Grid(json.getInt("width"), json.getInt("height"), json.getInt("layers"));
-
-  JSONArray gridJSON = json.getJSONArray("grid");
-  for (int i = 0; i < gridJSON.size(); i++) {
-    JSONObject blockJSON = gridJSON.getJSONObject(i);
-    Block block = newGrid.getBlockFromType(BlockType.values()[blockJSON.getInt("type")], getPositionFromJSON(blockJSON.getJSONObject("position")));
+ArrayList<Block> blocksFromJSON(JSONArray blocksJSON, BlockPosition offset) {
+  ArrayList<Block> blocks = new ArrayList<Block>();
+  for (int i = 0; i < blocksJSON.size(); i++) {
+    JSONObject blockJSON = blocksJSON.getJSONObject(i);
+    Block block = grid.getBlockFromType(BlockType.values()[blockJSON.getInt("type")], getPositionFromJSON(blockJSON.getJSONObject("position")).add(offset));
     block.charge = blockJSON.getBoolean("charge");
     block.lastCharge = blockJSON.getBoolean("lastCharge");
     block.interactionLock = blockJSON.getBoolean("interactionLock");
@@ -56,20 +46,24 @@ void loadGrid(String name) {
     ArrayList<BlockPosition> inputs = new ArrayList<BlockPosition>();
     JSONArray inputsJSON = blockJSON.getJSONArray("inputs");
     for (int j = 0; j < inputsJSON.size(); j++) {
-      inputs.add(getPositionFromJSON(inputsJSON.getJSONObject(j)));
+      inputs.add(getPositionFromJSON(inputsJSON.getJSONObject(j)).add(offset));
     }
     block.saveInputPositions = inputs;
 
-    newGrid.blocks.add(block);
+    blocks.add(block);
   }
 
-  for (Block block : newGrid.blocks) {
+  for (Block block : blocks) {
     for (BlockPosition inputPosition : block.saveInputPositions) {
-      block.inputs.add(newGrid.getBlockAtPosition(inputPosition));
+      for (Block inputBlock : blocks) {
+        if (inputBlock.position.isEqual(inputPosition)) {
+          block.inputs.add(inputBlock);
+        }
+      }
     }
   }
 
-  grid = newGrid;
+  return blocks;
 }
 
 BlockPosition getPositionFromJSON(JSONObject json) {

@@ -10,6 +10,13 @@ class Grid {
     blocks = new ArrayList<Block>();
   }
 
+  Grid(Snippet snippet) {
+    blocks = blocksFromJSON(snippet.blocksJSON, new BlockPosition(0, 0, 0));
+    gridWidth = snippet.gridWidth;
+    gridHeight = snippet.gridHeight;
+    gridLayers = snippet.gridLayers;
+  }
+
   void draw() {
     drawEmptyGrid();
     drawBlocks();
@@ -87,5 +94,17 @@ class Grid {
     for (Block block : queue) {
       block.updateSurroundingBlocks(block.getSurroundingBlocks(), block);
     }
+  }
+
+  void addSnippetAtPosition(Snippet snippet, BlockPosition offset) {
+    BlockPosition maximumPosition = offset.add(snippet.maximumPosition());
+    ArrayList<Block> removeQueue = new ArrayList<Block>();
+    for (Block block : blocks) {
+      if (block.position.isWithin(offset, maximumPosition)) removeQueue.add(block);
+    }
+    blocks.removeAll(removeQueue);
+
+    ArrayList<Block> snippetBlocks = blocksFromJSON(snippet.blocksJSON, offset);
+    for (Block block : snippetBlocks) blocks.add(block);
   }
 }
