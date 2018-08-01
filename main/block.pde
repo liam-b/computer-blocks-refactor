@@ -7,7 +7,9 @@ class Block {
   boolean charge;
   boolean lastCharge;
   boolean interactionLock;
+  boolean nextTickCharge;
   ArrayList<Block> inputs;
+  ArrayList<BlockPosition> saveInputPositions;
 
   BlockType type;
   color blockColorOn;
@@ -18,6 +20,7 @@ class Block {
     charge = false;
     lastCharge = false;
     interactionLock = false;
+    nextTickCharge = false;
     inputs = new ArrayList<Block>();
   }
 
@@ -28,8 +31,10 @@ class Block {
       player.translate.y + BLOCK_RATIO * position.y * player.zoom
     );
 
-    fill((charge) ? blockColorOn : blockColorOff);
-    rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
+    if (drawPosition.x > 0 - rectSize / 2 && drawPosition.x < width + rectSize / 2 && drawPosition.y > 0 - rectSize / 2 && drawPosition.y < height + rectSize / 2) {
+      fill((charge) ? blockColorOn : blockColorOff);
+      rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
+    }
   }
 
   ArrayList<Block> getSurroundingBlocks() {
@@ -87,14 +92,16 @@ class DirectionalBlock extends Block {
       player.translate.y + BLOCK_RATIO * position.y * player.zoom
     );
 
-    fill((charge) ? blockColorOn : blockColorOff);
-    rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
+    if (drawPosition.x > 0 - rectSize / 2 && drawPosition.x < width + rectSize / 2 && drawPosition.y > 0 - rectSize / 2 && drawPosition.y < height + rectSize / 2) {
+      fill((charge) ? blockColorOn : blockColorOff);
+      rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
 
-    fill(Color.SOURCE);
-    if (position.r == Rotation.DOWN) rect(drawPosition.x, drawPosition.y + rectSize / 2.5 - rectSize / 24, rectSize / 2, rectSize / 12);
-    if (position.r == Rotation.RIGHT) rect(drawPosition.x + rectSize / 2.5 - rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
-    if (position.r == Rotation.UP) rect(drawPosition.x, drawPosition.y - rectSize / 2.5 + rectSize / 24, rectSize / 2, rectSize / 12);
-    if (position.r == Rotation.LEFT) rect(drawPosition.x - rectSize / 2.5 + rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
+      fill(Color.SOURCE);
+      if (position.r == Rotation.DOWN) rect(drawPosition.x, drawPosition.y + rectSize / 2.5 - rectSize / 24, rectSize / 2, rectSize / 12);
+      if (position.r == Rotation.RIGHT) rect(drawPosition.x + rectSize / 2.5 - rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
+      if (position.r == Rotation.UP) rect(drawPosition.x, drawPosition.y - rectSize / 2.5 + rectSize / 24, rectSize / 2, rectSize / 12);
+      if (position.r == Rotation.LEFT) rect(drawPosition.x - rectSize / 2.5 + rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
+    }
   }
 }
 
@@ -155,8 +162,6 @@ class InverterBlock extends DirectionalBlock {
 }
 
 class DelayBlock extends DirectionalBlock {
-  boolean nextTickCharge;
-
   DelayBlock(BlockPosition position_) {
     super(position_);
 
@@ -185,10 +190,7 @@ class DelayBlock extends DirectionalBlock {
   }
 
   void tickUpdate() {
-    if (nextTickCharge != charge) {
-      charge = nextTickCharge;
-      draw();
-    }
+    if (nextTickCharge != charge) charge = nextTickCharge;
   }
 }
 

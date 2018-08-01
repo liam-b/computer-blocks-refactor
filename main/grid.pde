@@ -24,8 +24,10 @@ class Grid {
           player.translate.y + BLOCK_RATIO * y * player.zoom
         );
 
-        fill(Color.EMPTY);
-        rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
+        if (drawPosition.x > 0 - rectSize / 2 && drawPosition.x < width + rectSize / 2 && drawPosition.y > 0 - rectSize / 2 && drawPosition.y < height + rectSize / 2) {
+          fill(Color.EMPTY);
+          rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
+        }
       }
     }
   }
@@ -45,13 +47,18 @@ class Grid {
     return null;
   }
 
-  void place(BlockType type, BlockPosition position) {
+  Block getBlockFromType(BlockType type, BlockPosition position) {
     Block newBlock = new CableBlock(position);
     if (type == BlockType.CABLE) newBlock = new CableBlock(position);
     if (type == BlockType.SOURCE) newBlock = new SourceBlock(position);
     if (type == BlockType.INVERTER) newBlock = new InverterBlock(position);
     if (type == BlockType.VIA) newBlock = new ViaBlock(position);
     if (type == BlockType.DELAY) newBlock = new DelayBlock(position);
+    return newBlock;
+  }
+
+  void place(BlockType type, BlockPosition position) {
+    Block newBlock = getBlockFromType(type, position);
 
     blocks.add(newBlock);
     newBlock.update(newBlock);
