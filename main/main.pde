@@ -80,6 +80,9 @@ void mousePressed() {
     for (Button i : ui.buttonArray) {
       i.mousePressed();
     }
+    for (Button i : ui.savesButtonArray) {
+      i.mousePressed();
+    }
   }
 
   if (controller.getKey(char(CODED)) && keyCode == SHIFT) {

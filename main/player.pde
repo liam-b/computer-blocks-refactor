@@ -1,5 +1,5 @@
 enum State {
-  GAME, MENU, SAVE, LOAD, SNIP
+  GAME, MENU, SAVES, SNIP
 }
 
 class Player {
@@ -29,8 +29,11 @@ class Player {
     if (controller.getKey(char(24)) && state == State.GAME) {
       state  = State.MENU;
       controller.keyReleased(char(24));
-    } else if (controller.getKey(char(24)) && state == State.MENU) {
+    } else if (controller.getKey(char(24)) && state == State.MENU && ui.state == State.MENU) {
       state  = State.GAME;
+      controller.keyReleased(char(24));
+    } else if (controller.getKey(char(24)) && state == State.MENU && (ui.state == State.SAVES)) {
+      ui.state = State.MENU;
       controller.keyReleased(char(24));
     }
 
