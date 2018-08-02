@@ -93,7 +93,7 @@ class Block {
   }
 
   ArrayList<Block> getAdditionalBlocks() { return new ArrayList<Block>(); }
-  void tickUpdate() {}
+  boolean tickUpdate() { return false; }
   void drawDirectionMarker() {}
 }
 
@@ -209,8 +209,12 @@ class DelayBlock extends DirectionalBlock {
     nextTickCharge = inputs.size() != 0;
   }
 
-  void tickUpdate() {
-    if (nextTickCharge != charge) charge = nextTickCharge;
+  boolean tickUpdate() {
+    if (nextTickCharge != charge) {
+      charge = nextTickCharge;
+      return true;
+    };
+    return false;
   }
 }
 

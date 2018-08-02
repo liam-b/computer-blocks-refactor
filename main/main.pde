@@ -49,9 +49,9 @@ void draw() {
     grid = new Grid(new Snippet("snippets/", "test"));
   }
 
-  if (controller.getKey('l')) {
-    grid.addSnippetAtPosition(new Snippet("snippets/", "snip"), new BlockPosition(10, 10, 0));
-  }
+  // if (controller.getKey('l')) {
+  //   grid.addSnippetAtPosition(new Snippet("snippets/", "snip"), new BlockPosition(10, 10, 0));
+  // }
 }
 
 void keyPressed() {

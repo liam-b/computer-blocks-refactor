@@ -102,8 +102,9 @@ class Grid {
     ArrayList<Block> queue = new ArrayList<Block>();
     for (Block block : blocks) {
       if (block.type == BlockType.DELAY) {
-        block.tickUpdate();
-        queue.add(block);
+        if (block.tickUpdate()) {
+          queue.add(block);
+        }
       }
     }
 

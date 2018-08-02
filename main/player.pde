@@ -124,8 +124,8 @@ class Player {
 
     if (state == State.SNIP) {
       if (grid.blocks.size() > 0) {
-        BlockPosition highestPosition = new BlockPosition(grid.blocks.get(0).position);
-        BlockPosition lowestPosition = new BlockPosition(grid.blocks.get(0).position);
+        BlockPosition highestPosition = new BlockPosition(new BlockPosition(0, 0, 0));
+        BlockPosition lowestPosition = new BlockPosition(new BlockPosition(grid.gridHeight, grid.gridWidth, grid.gridLayers));
         for (Block block : grid.blocks) {
           if (block.selected) {
             if (block.position.x > highestPosition.x) highestPosition.x = block.position.x;
