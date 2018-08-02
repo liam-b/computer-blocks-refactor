@@ -11,7 +11,7 @@ UserInterface ui;
 void setup() {
   fullScreen();
   // size(500, 500);
-  pixelDensity(2);
+  pixelDensity(1);
   frameRate(60);
   cursor(CROSS);
   rectMode(CENTER);
@@ -79,7 +79,7 @@ void mousePressed() {
     }
     for (Button i : ui.buttonArray) {
       i.mousePressed();
-    }  
+    }
   }
 }
 

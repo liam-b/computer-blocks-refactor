@@ -118,6 +118,14 @@ class Grid {
     }
   }
 
+  void removeFakeBlocks() {
+    ArrayList<Block> removeQueue = new ArrayList<Block>();
+    for (Block block : grid.blocks) {
+      if (block.fake) removeQueue.add(block);
+    }
+    grid.blocks.removeAll(removeQueue);
+  }
+
   void addSnippetAtPosition(Snippet snippet, BlockPosition offset) {
     BlockPosition maximumPosition = offset.add(snippet.maximumPosition());
     ArrayList<Block> removeQueue = new ArrayList<Block>();

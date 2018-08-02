@@ -29,39 +29,27 @@ class Player {
   }
 
   void update() {
-    if (controller.getKey(char(24)) && state == State.GAME) {
-      state  = State.MENU;
-      controller.keyReleased(char(24));
-    } else if (controller.getKey(char(24)) && state == State.MENU && ui.state == State.MENU) {
-      state  = State.GAME;
-      controller.keyReleased(char(24));
-    } else if (controller.getKey(char(24)) && state == State.STAMP) {
-      ArrayList<Block> removeQueue = new ArrayList<Block>();
-      for (Block block : grid.blocks) {
-        if (block.fake) removeQueue.add(block);
+    if (onKeyPress(char(24))) {
+      if (state != State.MENU && state != State.STAMP) state = State.MENU;
+      else if (state == State.MENU) {
+        if (ui.state == State.MENU) state = State.GAME;
+        if (ui.state == State.SAVES) ui.state = State.MENU;
       }
-      grid.blocks.removeAll(removeQueue);
-      state = State.GAME;
-      controller.keyReleased(char(24));
-    } else if (controller.getKey(char(24)) && state == State.MENU && (ui.state == State.SAVES)) {
-      ui.state = State.MENU;
-      controller.keyReleased(char(24));
+      else if (state == State.STAMP) {
+        grid.removeFakeBlocks();
+        state = State.GAME;
+      }
+    }
 
-    if (controller.getKey('k') && state == State.GAME) {
+    if (onKeyPress(char(TAB)) && state == State.GAME) {
       state = State.STAMP;
-      controller.keyReleased('k');
       pasteSnippet = new Snippet("snippets/", "snip");
     }
 
     if (state == State.STAMP) {
       BlockPosition mousePosition = grid.getBlockPosition(mouseX, mouseY);
       if (mousePosition != null) {
-        ArrayList<Block> removeQueue = new ArrayList<Block>();
-        for (Block block : grid.blocks) {
-          if (block.fake) removeQueue.add(block);
-        }
-        grid.blocks.removeAll(removeQueue);
-
+        grid.removeFakeBlocks();
         pasteBlocks = blocksFromJSON(pasteSnippet.blocksJSON, mousePosition);
         for (Block block : pasteBlocks) {
           grid.blocks.add(block);
@@ -71,33 +59,19 @@ class Player {
     }
 
     if (state != State.MENU) {
-      if (controller.getKey('[')) selectedLayer -= 1;
-      if (controller.getKey(']')) selectedLayer += 1;
-
-      if (controller.getKey('[') || controller.getKey(']')) {
-        if (selectedLayer < 0) selectedLayer = 0;
-        if (selectedLayer > grid.gridLayers - 1) selectedLayer = grid.gridLayers - 1;
-        controller.keyReleased('[');
-        controller.keyReleased(']');
-      }
+      keyTranslateUpdate();
+      if (onKeyPress('[')) selectedLayer = max(0, selectedLayer - 1);
+      if (onKeyPress(']')) selectedLayer = min(selectedLayer + 1, grid.gridLayers - 1);
     }
 
     if (state == State.GAME) {
-      keyTranslateUpdate();
+      if (onKeyPress('1')) selectedType = BlockType.CABLE;
+      if (onKeyPress('2')) selectedType = BlockType.SOURCE;
+      if (onKeyPress('3')) selectedType = BlockType.INVERTER;
+      if (onKeyPress('4')) selectedType = BlockType.DELAY;
+      if (onKeyPress('5')) selectedType = BlockType.VIA;
 
-      if (controller.getKey('1')) selectedType = BlockType.CABLE;
-      if (controller.getKey('2')) selectedType = BlockType.SOURCE;
-      if (controller.getKey('3')) selectedType = BlockType.INVERTER;
-      if (controller.getKey('4')) selectedType = BlockType.DELAY;
-      if (controller.getKey('5')) selectedType = BlockType.VIA;
-
-      if (controller.getKey('r')) {
-        selectedRotationInt += 1;
-        controller.keyReleased('r');
-      }
-      if (selectedRotationInt > 3) selectedRotationInt = 0;
-
-      selectedRotation = Rotation.values()[selectedRotationInt];
+      if (onKeyPress('r')) selectedRotation = Rotation.values()[(selectedRotation.ordinal() + 1) > 3 ? 0 : selectedRotation.ordinal() + 1];
 
       if (controller.getMouse() == LEFT && mousePressed) {
         BlockPosition clickedPosition = grid.getBlockPosition(mouseX, mouseY);
@@ -121,7 +95,6 @@ class Player {
 
       BlockPosition mouseBlockPosition = grid.getBlockPosition(mouseX, mouseY);
       if (mouseBlockPosition != null) {
-        println(mouseBlockPosition.l);
         for (Block block : grid.blocks) {
           if (block.position.isWithin(initialSelectionBlockPosition, mouseBlockPosition)) {
             block.selected = true;
@@ -144,12 +117,7 @@ class Player {
     if (state == State.STAMP) {
       BlockPosition mousePosition = grid.getBlockPosition(mouseX, mouseY);
       if (mousePosition != null) {
-        ArrayList<Block> removeQueue = new ArrayList<Block>();
-        for (Block block : grid.blocks) {
-          if (block.fake) removeQueue.add(block);
-        }
-        grid.blocks.removeAll(removeQueue);
-
+        grid.removeFakeBlocks();
         grid.addSnippetAtPosition(pasteSnippet, mousePosition);
       }
     }
@@ -186,5 +154,11 @@ class Player {
 
   void mouseZoomUpdate(float scroll) {
     player.zoom -= scroll * player.zoom / 200.0f;
+  }
+
+  boolean onKeyPress(char keyPress) {
+    boolean result = controller.getKey(keyPress);
+    controller.keyReleased(keyPress);
+    return result;
   }
 }
