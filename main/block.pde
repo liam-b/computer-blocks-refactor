@@ -8,6 +8,8 @@ class Block {
   boolean lastCharge;
   boolean interactionLock;
   boolean nextTickCharge;
+  boolean selected;
+  boolean fake;
   ArrayList<Block> inputs;
   ArrayList<BlockPosition> saveInputPositions;
 
@@ -31,10 +33,24 @@ class Block {
       player.translate.y + BLOCK_RATIO * position.y * player.zoom
     );
 
-    if (drawPosition.x > 0 - rectSize / 2 && drawPosition.x < width + rectSize / 2 && drawPosition.y > 0 - rectSize / 2 && drawPosition.y < height + rectSize / 2) {
-      fill((charge) ? blockColorOn : blockColorOff);
+    if (withinScreenBounds(rectSize, drawPosition)) {
+      fillAndStroke();
       rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
     }
+  }
+
+  boolean withinScreenBounds(float rectSize, RealPosition drawPosition) {
+    return drawPosition.x > 0 - rectSize / 2 && drawPosition.x < width + rectSize / 2 && drawPosition.y > 0 - rectSize / 2 && drawPosition.y < height + rectSize / 2;
+  }
+
+  void fillAndStroke() {
+    if (selected) {
+      stroke(#31C831, 170);
+      strokeWeight(3);
+    } else noStroke();
+
+    if (fake) fill((charge) ? blockColorOn : blockColorOff, 150);
+    else fill((charge) ? blockColorOn : blockColorOff);
   }
 
   ArrayList<Block> getSurroundingBlocks() {
@@ -78,6 +94,7 @@ class Block {
 
   ArrayList<Block> getAdditionalBlocks() { return new ArrayList<Block>(); }
   void tickUpdate() {}
+  void drawDirectionMarker() {}
 }
 
 class DirectionalBlock extends Block {
@@ -92,16 +109,19 @@ class DirectionalBlock extends Block {
       player.translate.y + BLOCK_RATIO * position.y * player.zoom
     );
 
-    if (drawPosition.x > 0 - rectSize / 2 && drawPosition.x < width + rectSize / 2 && drawPosition.y > 0 - rectSize / 2 && drawPosition.y < height + rectSize / 2) {
-      fill((charge) ? blockColorOn : blockColorOff);
+    if (withinScreenBounds(rectSize, drawPosition)) {
+      fillAndStroke();
       rect(drawPosition.x, drawPosition.y, rectSize, rectSize);
-
-      fill(Color.SOURCE);
-      if (position.r == Rotation.DOWN) rect(drawPosition.x, drawPosition.y + rectSize / 2.5 - rectSize / 24, rectSize / 2, rectSize / 12);
-      if (position.r == Rotation.RIGHT) rect(drawPosition.x + rectSize / 2.5 - rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
-      if (position.r == Rotation.UP) rect(drawPosition.x, drawPosition.y - rectSize / 2.5 + rectSize / 24, rectSize / 2, rectSize / 12);
-      if (position.r == Rotation.LEFT) rect(drawPosition.x - rectSize / 2.5 + rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
+      drawDirectionMarker(rectSize, drawPosition);
     }
+  }
+
+  void drawDirectionMarker(float rectSize, RealPosition drawPosition) {
+    fill(Color.SOURCE);
+    if (position.r == Rotation.DOWN) rect(drawPosition.x, drawPosition.y + rectSize / 2.5 - rectSize / 24, rectSize / 2, rectSize / 12);
+    if (position.r == Rotation.RIGHT) rect(drawPosition.x + rectSize / 2.5 - rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
+    if (position.r == Rotation.UP) rect(drawPosition.x, drawPosition.y - rectSize / 2.5 + rectSize / 24, rectSize / 2, rectSize / 12);
+    if (position.r == Rotation.LEFT) rect(drawPosition.x - rectSize / 2.5 + rectSize / 24, drawPosition.y, rectSize / 12, rectSize / 2);
   }
 }
 

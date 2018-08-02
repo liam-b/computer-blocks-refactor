@@ -3,13 +3,10 @@ Player player;
 Controller controller;
 UserInterface ui;
 
-RealPosition clickedPosThing;
-boolean clickedThing = false;
-
 // Button exitButton;
 // Button windowButton;
 
-//save everything (copy paste, save files) as snippets and jiust load and save them as / from json
+//save everything (copy STAMP, save files) as snippets and jiust load and save them as / from json
 
 void setup() {
   fullScreen();
@@ -53,7 +50,7 @@ void draw() {
   }
 
   if (controller.getKey('l')) {
-    grid.addSnippetAtPosition(new Snippet("snippets/", "test"), new BlockPosition(10, 10, 0));
+    grid.addSnippetAtPosition(new Snippet("snippets/", "snip"), new BlockPosition(10, 10, 0));
   }
 }
 
@@ -80,11 +77,6 @@ void mousePressed() {
     for (Button i : ui.buttonArray) {
       i.mousePressed();
     }
-  }
-
-  if (controller.getKey(char(CODED)) && keyCode == SHIFT) {
-    clickedPosThing = new RealPosition(mouseX, mouseY);
-    clickedThing = true;
   }
 }
 

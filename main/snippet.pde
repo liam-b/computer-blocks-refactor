@@ -6,7 +6,7 @@ class Snippet {
 
   Snippet(BlockPosition positionA_, BlockPosition positionB_) {
     BlockPosition positionLeast = new BlockPosition(min(positionA_.x, positionB_.x), min(positionA_.y, positionB_.y), min(positionA_.l, positionB_.l));
-    BlockPosition positionMost = new BlockPosition(max(positionA_.x, positionB_.x), max(positionA_.y, positionB_.y), min(positionA_.l, positionB_.l));
+    BlockPosition positionMost = new BlockPosition(max(positionA_.x, positionB_.x), max(positionA_.y, positionB_.y), max(positionA_.l, positionB_.l));
     ArrayList<Block> blocks = new ArrayList<Block>();
 
     for (Block block : grid.blocks) {
