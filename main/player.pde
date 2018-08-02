@@ -1,5 +1,5 @@
 enum State {
-  GAME, MENU
+  GAME, MENU, SAVE, LOAD
 }
 
 class Player {

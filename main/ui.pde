@@ -46,12 +46,12 @@ class UserInterface {
 
     ui.buttonArray.add(new Button("QUIT", 40, width/2, height/3, MENU_WIDTH*0.9, height/10, Color.CABLE_OFF, ButtonType.EXIT));
     ui.buttonArray.add(new Button("X", 20, width - 60, 60, 40, 40, #CE4E4A, #a24c4a, ButtonType.EXIT_MENU));
-    ui.buttonArray.add(new Button("UI_SCALE", 40, width/2, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.47, height/10, Color.CABLE_OFF, ButtonType.NONE));
+    ui.buttonArray.add(new Button("UI_SCALE", 40, width/2, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.47 + 20, height/10, color(124, 124, 124), ButtonType.NONE));
     ui.buttonArray.add(new Button("+", 40, width/2 + MENU_WIDTH*0.35, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.2, height/10, Color.CABLE_OFF, ButtonType.INCREASE_UI));
     ui.buttonArray.add(new Button("-", 40, width/2 - MENU_WIDTH*0.35, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.2, height/10, Color.CABLE_OFF, ButtonType.DECREASE_UI));
 
-    ui.buttonArray.add(new Button("SAVE", 40, width/2, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.47, height/10, Color.CABLE_OFF, ButtonType.NONE));
-    ui.buttonArray.add(new Button("LOAD", 40, width/2, height/3 + MENU_HEIGHT/3/2, MENU_WIDTH*0.47, height/10, Color.CABLE_OFF, ButtonType.NONE));
+    ui.buttonArray.add(new Button("SAVE", 40, width/2 - MENU_WIDTH*0.45/2 - 2.5, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.44, height/10, Color.CABLE_OFF, ButtonType.EXIT));
+    ui.buttonArray.add(new Button("LOAD", 40, width/2 + MENU_WIDTH*0.45/2 + 2.5, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.44, height/10, Color.CABLE_OFF, ButtonType.EXIT));
   }
 
   void update() {
@@ -78,23 +78,32 @@ class UserInterface {
     fill(Color.BACKGROUND);
     rect(width/2, height/2, MENU_WIDTH, MENU_HEIGHT);
 
-    for (Button i : buttonArray) {
-      i.draw();
+    if (player.state == State.MENU) {
+
+      for (Button i : buttonArray) {
+        i.draw();
+      }
+
+      textAlign(CENTER, CENTER);
+      textSize(60);
+      fill(124, 124, 124);
+      text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425 + 4);
+      fill(Color.CABLE_OFF);
+      text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425);
+    } else {
+      textAlign(CENTER, CENTER);
+      textSize(30);
+      fill(124, 124, 124);
+      text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425 + 4);
+      fill(Color.CABLE_OFF);
+      text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425);
     }
-
-    textAlign(CENTER, CENTER);
-    textSize(60);
-    fill(124, 124, 124);
-    text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425 + 4);
-    fill(Color.CABLE_OFF);
-    text("COMPUTER BLOCKS", width/2, height/2 - MENU_HEIGHT*0.425);
-
   }
 
 }
 
 enum ButtonType {
-  EXIT, INCREASE_UI, DECREASE_UI, EXIT_MENU, NONE
+  EXIT, INCREASE_UI, DECREASE_UI, EXIT_MENU, NONE, SAVE_MENU, LOAD_MENU
 };
 
 class Button {
@@ -140,6 +149,7 @@ class Button {
   void draw() {
     fill(shadowColor);
     rect(x, y+4, btnWidth, btnHeight);
+
     fill(col);
     textSize(fontSize);
     rect(x, y, btnWidth, btnHeight);
@@ -167,7 +177,11 @@ class Button {
           break;
 
         case EXIT_MENU:
-          player.gameState = State.GAME;
+          player.state = State.GAME;
+          break;
+
+        case SAVE_MENU:
+          player.state = State.SAVE;
           break;
 
         case EXIT: exit();
