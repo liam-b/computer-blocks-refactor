@@ -3,6 +3,14 @@ Player player;
 Controller controller;
 UserInterface ui;
 
+RealPosition clickedPosThing;
+boolean clickedThing = false;
+
+// Button exitButton;
+// Button windowButton;
+
+//save everything (copy paste, save files) as snippets and jiust load and save them as / from json
+
 void setup() {
   fullScreen();
   // size(500, 500);
@@ -30,10 +38,10 @@ void draw() {
   player.update();
   ui.update();
 
-  if (player.gameState == State.MENU) ui.drawMenu();
+  if (player.state == State.MENU) ui.drawMenu();
   if (frameCount % 10 == 0) grid.tickBlocks();
 
-  cursor((player.gameState == State.MENU) ? ARROW : CROSS);
+  cursor((player.state == State.MENU) ? ARROW : CROSS);
 
   if (controller.getKey('o')) {
     Snippet snippet = new Snippet(grid);
@@ -66,9 +74,20 @@ void mouseWheel(MouseEvent event) {
 }
 
 void mousePressed() {
-  if (player.gameState == State.MENU) {
+  player.mousePressed();
+
+  if (player.state == State.MENU) {
     for (Button i : ui.buttonArray) {
       i.mousePressed();
     }
   }
+
+  if (controller.getKey(char(CODED)) && keyCode == SHIFT) {
+    clickedPosThing = new RealPosition(mouseX, mouseY);
+    clickedThing = true;
+  }
+}
+
+void mouseReleased () {
+  player.mouseReleased();
 }

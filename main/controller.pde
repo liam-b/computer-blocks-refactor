@@ -3,7 +3,6 @@ class Controller {
 
   Controller() {
     keys = new ArrayList<Integer>();
-    keys = new ArrayList<Integer>();
   }
 
   void keyPressed(char c) {

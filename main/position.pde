@@ -1,5 +1,5 @@
 enum Rotation {
-  UP, DOWN, LEFT, RIGHT
+  UP, RIGHT, DOWN, LEFT
 }
 
 BlockPosition getBlockPosition(int xPosition, int yPosition) {
