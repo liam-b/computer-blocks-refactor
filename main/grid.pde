@@ -20,6 +20,7 @@ class Grid {
   void draw() {
     drawEmptyGrid();
     drawBlocks();
+    noStroke();
   }
 
   void drawEmptyGrid() {
@@ -43,6 +44,21 @@ class Grid {
     for (Block block : blocks) {
       if (block.position.l == player.selectedLayer) block.draw();
     }
+  }
+
+  BlockPosition getBlockPosition(int xPosition, int yPosition) {
+    for (int x_ = 0; x_ < gridWidth; x_++) {
+      for (int y_ = 0; y_ < gridHeight; y_++) {
+        if (xPosition > player.translate.x + BLOCK_RATIO * x_ * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+            xPosition < player.translate.x + BLOCK_RATIO * x_ * player.zoom + BLOCK_SIZE * player.zoom / 2 &&
+            yPosition > player.translate.y + BLOCK_RATIO * y_ * player.zoom - BLOCK_SIZE * player.zoom / 2 &&
+            yPosition < player.translate.y + BLOCK_RATIO * y_ * player.zoom + BLOCK_SIZE * player.zoom / 2) {
+
+          return new BlockPosition(x_, y_, player.selectedLayer);
+        }
+      }
+    }
+    return null;
   }
 
   Block getBlockAtPosition(BlockPosition position) {
@@ -94,6 +110,20 @@ class Grid {
     for (Block block : queue) {
       block.updateSurroundingBlocks(block.getSurroundingBlocks(), block);
     }
+  }
+
+  void unselectAllBlocks() {
+    for (Block block : blocks) {
+      block.selected = false;
+    }
+  }
+
+  void removeFakeBlocks() {
+    ArrayList<Block> removeQueue = new ArrayList<Block>();
+    for (Block block : grid.blocks) {
+      if (block.fake) removeQueue.add(block);
+    }
+    grid.blocks.removeAll(removeQueue);
   }
 
   void addSnippetAtPosition(Snippet snippet, BlockPosition offset) {
