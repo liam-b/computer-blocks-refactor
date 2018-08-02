@@ -1,5 +1,5 @@
 enum State {
-  GAME, MENU, SNIP, STAMP
+  GAME, MENU, SAVES, SNIP, STAMP
 }
 
 class Player {
@@ -32,7 +32,7 @@ class Player {
     if (controller.getKey(char(24)) && state == State.GAME) {
       state  = State.MENU;
       controller.keyReleased(char(24));
-    } else if (controller.getKey(char(24)) && state == State.MENU) {
+    } else if (controller.getKey(char(24)) && state == State.MENU && ui.state == State.MENU) {
       state  = State.GAME;
       controller.keyReleased(char(24));
     } else if (controller.getKey(char(24)) && state == State.STAMP) {
@@ -43,7 +43,9 @@ class Player {
       grid.blocks.removeAll(removeQueue);
       state = State.GAME;
       controller.keyReleased(char(24));
-    }
+    } else if (controller.getKey(char(24)) && state == State.MENU && (ui.state == State.SAVES)) {
+      ui.state = State.MENU;
+      controller.keyReleased(char(24));
 
     if (controller.getKey('k') && state == State.GAME) {
       state = State.STAMP;

@@ -74,9 +74,12 @@ void mousePressed() {
   player.mousePressed();
 
   if (player.state == State.MENU) {
-    for (Button i : ui.buttonArray) {
+    for (Button i : ui.savesButtonArray) {
       i.mousePressed();
     }
+    for (Button i : ui.buttonArray) {
+      i.mousePressed();
+    }  
   }
 }
 
