@@ -54,14 +54,21 @@ class UserInterface {
     buttonArray.add(new Button("-", 40, width/2 - MENU_WIDTH*0.35, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.2, height/10, Color.CABLE_OFF, ButtonType.DECREASE_UI));
     buttonArray.add(new Button("SAVES", 40, width/2, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.9, height/10, Color.CABLE_OFF, ButtonType.SAVES));
 
-    // savesButtonArray.add(new Button("", 40, width/2 + MENU_WIDTH*0.9/2 - MENU_WIDTH*0.9*1/12 - MENU_WIDTH*0.9*1/12 - 2, height/3, MENU_WIDTH*0.9*1/6, height/10, #626262, #626262, ButtonType.NONE));
-    Button i = new Button("random_save", 40, width/2 - MENU_WIDTH*0.9/2 + MENU_WIDTH*0.9*2/6 - 4, height/3, MENU_WIDTH*0.9*2/3 - 8, height/10, #626262, #626262, ButtonType.NONE);
+    // save buttons
+    Button i = new Button("random_save1", 40, width/2 - MENU_WIDTH*0.9/2 + MENU_WIDTH*0.9*2/6 - 4, height/3, MENU_WIDTH*0.9*2/3 - 8, height/10, #626262, #626262, ButtonType.NONE);
     savesButtonArray.add(i);
     savesButtonArray.add(new Button("Save", 25, width/2 + MENU_WIDTH*0.9/2 - MENU_WIDTH*0.9*1/12 - MENU_WIDTH*0.9*1/6 - 4, height/3, MENU_WIDTH*0.9*1/6, height/10, Color.CABLE_OFF, ButtonType.SAVE_BUTTON, i));
     savesButtonArray.add(new Button("Load", 25, width/2 + MENU_WIDTH*0.9/2 - MENU_WIDTH*0.9*1/12, height/3, MENU_WIDTH*0.9*1/6, height/10, Color.CABLE_OFF, ButtonType.LOAD_BUTTON, i));
 
-    // ui.buttonArray.add(new Button("SAVE", 40, width/2 - MENU_WIDTH*0.45/2 - 2.5, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.44, height/10, Color.CABLE_OFF, ButtonType.SAVE_MENU));
-    // ui.buttonArray.add(new Button("LOAD", 40, width/2 + MENU_WIDTH*0.45/2 + 2.5, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.44, height/10, Color.CABLE_OFF, ButtonType.LOAD_MENU));
+    i = new Button("random_save2", 40, width/2 - MENU_WIDTH*0.9/2 + MENU_WIDTH*0.9*2/6 - 4, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.9*2/3 - 8, height/10, #626262, #626262, ButtonType.NONE);
+    savesButtonArray.add(i);
+    savesButtonArray.add(new Button("Save", 25, width/2 + MENU_WIDTH*0.9/2 - MENU_WIDTH*0.9*1/12 - MENU_WIDTH*0.9*1/6 - 4, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.9*1/6, height/10, Color.CABLE_OFF, ButtonType.SAVE_BUTTON, i));
+    savesButtonArray.add(new Button("Load", 25, width/2 + MENU_WIDTH*0.9/2 - MENU_WIDTH*0.9*1/12, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.9*1/6, height/10, Color.CABLE_OFF, ButtonType.LOAD_BUTTON, i));
+
+    i = new Button("random_save3", 40, width/2 - MENU_WIDTH*0.9/2 + MENU_WIDTH*0.9*2/6 - 4, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.9*2/3 - 8, height/10, #626262, #626262, ButtonType.NONE);
+    savesButtonArray.add(i);
+    savesButtonArray.add(new Button("Save", 25, width/2 + MENU_WIDTH*0.9/2 - MENU_WIDTH*0.9*1/12 - MENU_WIDTH*0.9*1/6 - 4, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.9*1/6, height/10, Color.CABLE_OFF, ButtonType.SAVE_BUTTON, i));
+    savesButtonArray.add(new Button("Load", 25, width/2 + MENU_WIDTH*0.9/2 - MENU_WIDTH*0.9*1/12, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.9*1/6, height/10, Color.CABLE_OFF, ButtonType.LOAD_BUTTON, i));
   }
 
   void update() {

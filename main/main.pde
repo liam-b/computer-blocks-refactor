@@ -77,12 +77,12 @@ void mousePressed() {
   player.mousePressed();
 
   if (player.state == State.MENU) {
-    for (Button i : ui.buttonArray) {
-      i.mousePressed();
-    }
     for (Button i : ui.savesButtonArray) {
       i.mousePressed();
     }
+    for (Button i : ui.buttonArray) {
+      i.mousePressed();
+    }  
   }
 
   if (controller.getKey(char(CODED)) && keyCode == SHIFT) {
