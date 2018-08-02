@@ -196,7 +196,7 @@ class Button {
   }
 
   void mousePressed() {
-    if (pointIsEqual(mouseX, mouseY) && mousePressed && mouseButton == LEFT) {
+    if (pointIsEqual(mouseX, mouseY) && mouseButton == LEFT) {
       if (ui.state == State.MENU) {
         switch(buttonType) {
           case INCREASE_UI:
