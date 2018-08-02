@@ -73,12 +73,30 @@ void mouseWheel(MouseEvent event) {
 void mousePressed() {
   player.mousePressed();
 
+  if (controller.getKey(char(CODED)) && keyCode == SHIFT) {
+    clickedPosThing = new RealPosition(mouseX, mouseY);
+    clickedThing = true;
+  }
   if (player.state == State.MENU) {
     for (Button i : ui.savesButtonArray) {
       i.mousePressed();
     }
     for (Button i : ui.buttonArray) {
       i.mousePressed();
+    }
+  }
+}
+
+void mouseClicked() {
+  if (player.state == State.MENU) {
+    if (ui.state == State.MENU) {
+      for (Button i : ui.buttonArray) {
+        i.mousePressed();
+      }
+    } else if (ui.state == State.SAVES) {
+      for (Button i : ui.savesButtonArray) {
+        i.mousePressed();
+      }
     }
   }
 }
