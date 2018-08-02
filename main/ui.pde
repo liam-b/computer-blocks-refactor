@@ -1,9 +1,12 @@
 class UserInterface {
 
   ArrayList<Button> buttonArray = new ArrayList<Button>();
+  ArrayList<Button> saveButtonArray = new ArrayList<Button>();
 
   RealPosition selectedBlockPosition = new RealPosition(UI_SCALE/2 + UI_BORDER, height - UI_SCALE/2 - UI_BORDER);
   RealPosition layerIconPosition = new RealPosition(selectedBlockPosition.x + UI_SCALE + UI_SPACING, selectedBlockPosition.y);
+
+  PFont uiFont;
 
   UserInterface() {
 
@@ -35,6 +38,20 @@ class UserInterface {
   void drawBlock(float x_, float y_, float width_, float height_, color col_) {
     fill(col_);
     rect(x_, y_, width_, height_);
+  }
+
+  void setup() {
+    uiFont = createFont("Roboto-Regular.ttf", 20);
+    textFont(uiFont);
+
+    ui.buttonArray.add(new Button("QUIT", 40, width/2, height/3, MENU_WIDTH*0.9, height/10, Color.CABLE_OFF, ButtonType.EXIT));
+    ui.buttonArray.add(new Button("X", 20, width - 60, 60, 40, 40, #CE4E4A, #a24c4a, ButtonType.EXIT_MENU));
+    ui.buttonArray.add(new Button("UI_SCALE", 40, width/2, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.47, height/10, Color.CABLE_OFF, ButtonType.NONE));
+    ui.buttonArray.add(new Button("+", 40, width/2 + MENU_WIDTH*0.35, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.2, height/10, Color.CABLE_OFF, ButtonType.INCREASE_UI));
+    ui.buttonArray.add(new Button("-", 40, width/2 - MENU_WIDTH*0.35, height/3 + MENU_HEIGHT/6, MENU_WIDTH*0.2, height/10, Color.CABLE_OFF, ButtonType.DECREASE_UI));
+
+    ui.buttonArray.add(new Button("SAVE", 40, width/2, height/3 + MENU_HEIGHT/3, MENU_WIDTH*0.47, height/10, Color.CABLE_OFF, ButtonType.NONE));
+    ui.buttonArray.add(new Button("LOAD", 40, width/2, height/3 + MENU_HEIGHT/3/2, MENU_WIDTH*0.47, height/10, Color.CABLE_OFF, ButtonType.NONE));
   }
 
   void update() {
@@ -141,8 +158,7 @@ class Button {
       switch(buttonType) {
         case INCREASE_UI:
           UI_SCALE += 5;
-          UI_SPACING += 1
-          ;
+          UI_SPACING += 1;
           break;
 
         case DECREASE_UI:
