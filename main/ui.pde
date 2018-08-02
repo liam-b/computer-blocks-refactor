@@ -151,7 +151,7 @@ class Button {
           break;
 
         case EXIT_MENU:
-          player.gameState = State.GAME;
+          player.state = State.GAME;
           break;
 
         case EXIT: exit();
